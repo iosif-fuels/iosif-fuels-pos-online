@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reports</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
 
+<div class="container">
+    <h1>Reports</h1>
+
+    <div class="nav">
+        <a href="/">POS</a>
+        <a href="/reports">Daily Report</a>
+        <a href="/monthly_report">Monthly Report</a>
+        <a href="/customers">Customer Statements</a>
+    </div>
+
+    <div class="card">
+        <h2>Today Report - {{ today }}</h2>
+        <p><b>Sales / Charges:</b> €{{ "%.2f"|format(daily_sales) }}</p>
+        <p><b>Customer Payments:</b> €{{ "%.2f"|format(daily_payments) }}</p>
+
+        <form method="POST" action="/end_day">
+            <button type="submit">End Day / Save Daily Report</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Today Totals By Type</h2>
+        <table>
+            <tr><th>Type</th><th>Total</th></tr>
+            {% for d in daily_by_type %}
+            <tr>
+                <td>{{ d.type }}</td>
+                <td>€{{ "%.2f"|format(d.total) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Closed Daily Reports</h2>
+        <table>
+            <tr>
+                <th>Day</th>
+                <th>Accessories Sales</th>
+                <th>Customer Charges</th>
+                <th>Customer Payments</th>
+                <th>Total Sales</th>
+                <th>Closed At</th>
+            </tr>
+
+            {% for d in closed_days %}
+            <tr>
+                <td>{{ d.day }}</td>
+                <td>€{{ "%.2f"|format(d.accessories_sales) }}</td>
+                <td>€{{ "%.2f"|format(d.customer_charges) }}</td>
+                <td>€{{ "%.2f"|format(d.customer_payments) }}</td>
+                <td>€{{ "%.2f"|format(d.total_sales) }}</td>
+                <td>{{ d.closed_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Today Transactions</h2>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Type</th>
+                <th>Item</th>
+                <th>Amount</th>
+                <th>Description</th>
+            </tr>
+
+            {% for t in daily_transactions %}
+            <tr>
+                <td>{{ t.date }}</td>
+                <td>{{ t.customer_name or "Cash Sale" }}</td>
+                <td>{{ t.type }}</td>
+                <td>{{ t.item }}</td>
+                <td>€{{ "%.2f"|format(t.amount) }}</td>
+                <td>{{ t.car_reg }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
