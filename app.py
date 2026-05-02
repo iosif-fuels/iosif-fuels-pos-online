@@ -1,7 +1,8 @@
 import os
+from datetime import datetime, date
+
 import psycopg2
 import psycopg2.extras
-from datetime import datetime, date
 from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
@@ -21,19 +22,8 @@ def index():
     cur.execute("SELECT * FROM customers ORDER BY name")
     customers = cur.fetchall()
 
-    cur.execute("""
-        SELECT 
-            c.id,
-            c.name,
-            c.phone,
-            c.credit_limit,
-            COALESCE(SUM(t.amount), 0) AS balance
-        FROM customers c
-        LEFT JOIN transactions t ON c.id = t.customer_id
-        GROUP BY c.id, c.name, c.phone, c.credit_limit
-        ORDER BY c.name
-    """)
-    balances = cur.fetchall()
+    cur.execute("SELECT * FROM accessories ORDER BY name")
+    accessories = cur.fetchall()
 
     cur.execute("""
         SELECT t.*, c.name AS customer_name
@@ -44,8 +34,15 @@ def index():
     """)
     transactions = cur.fetchall()
 
-    cur.execute("SELECT * FROM accessories ORDER BY name")
-    accessories = cur.fetchall()
+    cur.execute("""
+        SELECT c.id, c.name, c.phone, c.credit_limit,
+               COALESCE(SUM(t.amount), 0) AS balance
+        FROM customers c
+        LEFT JOIN transactions t ON c.id = t.customer_id
+        GROUP BY c.id, c.name, c.phone, c.credit_limit
+        ORDER BY c.name
+    """)
+    balances = cur.fetchall()
 
     cur.close()
     conn.close()
@@ -53,9 +50,9 @@ def index():
     return render_template(
         "index.html",
         customers=customers,
-        balances=balances,
+        accessories=accessories,
         transactions=transactions,
-        accessories=accessories
+        balances=balances
     )
 
 
@@ -96,14 +93,7 @@ def charge():
     cur.execute("""
         INSERT INTO transactions (customer_id, type, item, amount, car_reg, date)
         VALUES (%s, %s, %s, %s, %s, %s)
-    """, (
-        customer_id,
-        trans_type,
-        item,
-        amount,
-        car_reg,
-        datetime.now()
-    ))
+    """, (customer_id, trans_type, item, amount, car_reg, datetime.now()))
     conn.commit()
     cur.close()
     conn.close()
@@ -128,6 +118,170 @@ def add_accessory():
     conn.close()
 
     return redirect(url_for("index"))
+
+
+@app.route("/sell_accessory", methods=["POST"])
+def sell_accessory():
+    accessory_id = request.form.get("accessory_id")
+    qty_sold = int(request.form.get("qty") or 1)
+
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("SELECT * FROM accessories WHERE id = %s", (accessory_id,))
+    accessory = cur.fetchone()
+
+    if not accessory:
+        cur.close()
+        conn.close()
+        return "Accessory not found"
+
+    if accessory["qty"] < qty_sold:
+        cur.close()
+        conn.close()
+        return "Not enough stock"
+
+    total = float(accessory["price"]) * qty_sold
+
+    cur.execute("""
+        INSERT INTO transactions (customer_id, type, item, amount, car_reg, date)
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """, (
+        None,
+        "Accessories",
+        f"{accessory['name']} x {qty_sold}",
+        total,
+        "Cash Sale",
+        datetime.now()
+    ))
+
+    cur.execute("""
+        UPDATE accessories
+        SET qty = qty - %s
+        WHERE id = %s
+    """, (qty_sold, accessory_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for("index"))
+
+
+@app.route("/reports")
+def reports():
+    today = date.today()
+
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("""
+        SELECT type, COALESCE(SUM(amount), 0) AS total
+        FROM transactions
+        WHERE DATE(date) = %s
+        GROUP BY type
+    """, (today,))
+    daily_by_type = cur.fetchall()
+
+    cur.execute("""
+        SELECT t.*, c.name AS customer_name
+        FROM transactions t
+        LEFT JOIN customers c ON c.id = t.customer_id
+        WHERE DATE(t.date) = %s
+        ORDER BY t.id DESC
+    """, (today,))
+    daily_transactions = cur.fetchall()
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount), 0) AS total
+        FROM transactions
+        WHERE DATE(date) = %s AND amount > 0
+    """, (today,))
+    daily_sales = cur.fetchone()["total"]
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount), 0) AS total
+        FROM transactions
+        WHERE DATE(date) = %s AND amount < 0
+    """, (today,))
+    daily_payments = abs(cur.fetchone()["total"])
+
+    cur.execute("""
+        SELECT *
+        FROM daily_closings
+        ORDER BY day DESC
+    """)
+    closed_days = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "reports.html",
+        today=today,
+        daily_by_type=daily_by_type,
+        daily_transactions=daily_transactions,
+        daily_sales=daily_sales,
+        daily_payments=daily_payments,
+        closed_days=closed_days
+    )
+
+
+@app.route("/end_day", methods=["POST"])
+def end_day():
+    today = date.today()
+
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount), 0) AS total
+        FROM transactions
+        WHERE DATE(date) = %s AND type = 'Accessories'
+    """, (today,))
+    accessories_sales = cur.fetchone()["total"]
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount), 0) AS total
+        FROM transactions
+        WHERE DATE(date) = %s AND customer_id IS NOT NULL AND amount > 0
+    """, (today,))
+    customer_charges = cur.fetchone()["total"]
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount), 0) AS total
+        FROM transactions
+        WHERE DATE(date) = %s AND customer_id IS NOT NULL AND amount < 0
+    """, (today,))
+    customer_payments = abs(cur.fetchone()["total"])
+
+    total_sales = accessories_sales + customer_charges
+
+    cur.execute("""
+        INSERT INTO daily_closings
+        (day, accessories_sales, customer_charges, customer_payments, total_sales, closed_at)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        ON CONFLICT (day)
+        DO UPDATE SET
+            accessories_sales = EXCLUDED.accessories_sales,
+            customer_charges = EXCLUDED.customer_charges,
+            customer_payments = EXCLUDED.customer_payments,
+            total_sales = EXCLUDED.total_sales,
+            closed_at = EXCLUDED.closed_at
+    """, (
+        today,
+        accessories_sales,
+        customer_charges,
+        customer_payments,
+        total_sales,
+        datetime.now()
+    ))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for("reports"))
 
 
 if __name__ == "__main__":
