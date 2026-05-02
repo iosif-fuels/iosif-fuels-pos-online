@@ -282,7 +282,111 @@ def end_day():
     conn.close()
 
     return redirect(url_for("reports"))
+@app.route("/monthly_report")
+def monthly_report():
+    selected_month = request.args.get("month", date.today().strftime("%Y-%m"))
 
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("""
+        SELECT type, COALESCE(SUM(amount), 0) AS total
+        FROM transactions
+        WHERE TO_CHAR(date, 'YYYY-MM') = %s
+        GROUP BY type
+        ORDER BY type
+    """, (selected_month,))
+    monthly_by_type = cur.fetchall()
+
+    cur.execute("""
+        SELECT item, COALESCE(SUM(amount), 0) AS total
+        FROM transactions
+        WHERE TO_CHAR(date, 'YYYY-MM') = %s
+        AND type = 'Accessories'
+        GROUP BY item
+        ORDER BY total DESC
+    """, (selected_month,))
+    monthly_accessories = cur.fetchall()
+
+    cur.execute("""
+        SELECT c.id, c.name,
+               COALESCE(SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END), 0) AS charges,
+               COALESCE(SUM(CASE WHEN t.amount < 0 THEN t.amount ELSE 0 END), 0) AS payments,
+               COALESCE(SUM(t.amount), 0) AS balance_change
+        FROM customers c
+        LEFT JOIN transactions t
+            ON c.id = t.customer_id
+            AND TO_CHAR(t.date, 'YYYY-MM') = %s
+        GROUP BY c.id, c.name
+        ORDER BY c.name
+    """, (selected_month,))
+    customer_monthly = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "monthly_report.html",
+        selected_month=selected_month,
+        monthly_by_type=monthly_by_type,
+        monthly_accessories=monthly_accessories,
+        customer_monthly=customer_monthly
+    )
+
+
+@app.route("/customers")
+def customers():
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("""
+        SELECT c.id, c.name, c.phone, c.credit_limit,
+               COALESCE(SUM(t.amount), 0) AS balance
+        FROM customers c
+        LEFT JOIN transactions t ON c.id = t.customer_id
+        GROUP BY c.id, c.name, c.phone, c.credit_limit
+        ORDER BY c.name
+    """)
+    customers = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template("customers.html", customers=customers)
+
+
+@app.route("/customer_statement/<int:customer_id>")
+def customer_statement(customer_id):
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("SELECT * FROM customers WHERE id = %s", (customer_id,))
+    customer = cur.fetchone()
+
+    cur.execute("""
+        SELECT *
+        FROM transactions
+        WHERE customer_id = %s
+        ORDER BY date DESC
+    """, (customer_id,))
+    transactions = cur.fetchall()
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount), 0) AS balance
+        FROM transactions
+        WHERE customer_id = %s
+    """, (customer_id,))
+    balance = cur.fetchone()["balance"]
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "customer_statement.html",
+        customer=customer,
+        transactions=transactions,
+        balance=balance
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
