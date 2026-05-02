@@ -1,1 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customers</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
 
+<div class="container">
+    <h1>Customers</h1>
+
+    <div class="nav">
+        <a href="/">POS</a>
+        <a href="/reports">Daily Report</a>
+        <a href="/monthly_report">Monthly Report</a>
+    </div>
+
+    <div class="card">
+        <h2>Customer Balances</h2>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Credit Limit</th>
+                <th>Current Balance</th>
+                <th>Statement</th>
+            </tr>
+
+            {% for c in customers %}
+            <tr>
+                <td>{{ c.name }}</td>
+                <td>{{ c.phone }}</td>
+                <td>€{{ "%.2f"|format(c.credit_limit) }}</td>
+                <td>€{{ "%.2f"|format(c.balance) }}</td>
+                <td>
+                    <a href="/customer_statement/{{ c.id }}">
+                        Open Statement
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
