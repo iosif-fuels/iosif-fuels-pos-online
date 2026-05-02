@@ -1,1 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monthly Report</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
 
+<div class="container">
+    <h1>Monthly Report</h1>
+
+    <div class="nav">
+        <a href="/">POS</a>
+        <a href="/reports">Daily Report</a>
+        <a href="/customers">Customer Statements</a>
+    </div>
+
+    <div class="card">
+        <h2>Select Month</h2>
+        <form method="GET" action="/monthly_report">
+            <input type="month" name="month" value="{{ selected_month }}">
+            <button type="submit">Show Month</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Sales By Type - {{ selected_month }}</h2>
+        <table>
+            <tr><th>Type</th><th>Total</th></tr>
+            {% for m in monthly_by_type %}
+            <tr>
+                <td>{{ m.type }}</td>
+                <td>€{{ "%.2f"|format(m.total) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Accessories Sales</h2>
+        <table>
+            <tr><th>Accessory</th><th>Total Sales</th></tr>
+            {% for a in monthly_accessories %}
+            <tr>
+                <td>{{ a.item }}</td>
+                <td>€{{ "%.2f"|format(a.total) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Customer Monthly Activity</h2>
+        <table>
+            <tr>
+                <th>Customer</th>
+                <th>Charged</th>
+                <th>Paid</th>
+                <th>Month Change</th>
+                <th>Statement</th>
+            </tr>
+
+            {% for c in customer_monthly %}
+            <tr>
+                <td>{{ c.name }}</td>
+                <td>€{{ "%.2f"|format(c.charges) }}</td>
+                <td>€{{ "%.2f"|format((c.payments or 0) * -1) }}</td>
+                <td>€{{ "%.2f"|format(c.balance_change) }}</td>
+                <td><a href="/customer_statement/{{ c.id }}">Open</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
