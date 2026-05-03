@@ -690,16 +690,58 @@ def fuel_stock():
 def add_fuel_movement():
     fuel_type = request.form.get("fuel_type")
     movement_type = request.form.get("movement_type")
-    liters = request.form.get("liters") or 0
+    liters = float(request.form.get("liters") or 0)
     note = request.form.get("note")
 
     conn = get_db()
     cur = conn.cursor()
 
-    cur.execute("""
-        INSERT INTO fuel_movements (fuel_type, movement_type, liters, note, created_at)
-        VALUES (%s, %s, %s, %s, %s)
-    """, (fuel_type, movement_type, liters, note, datetime.now()))
+    # If morning tank reading, reset today's real tank level
+    if movement_type == "Tank Reading":
+
+        # Delete previous tank reading for this fuel today
+        cur.execute("""
+            DELETE FROM fuel_movements
+            WHERE fuel_type = %s
+            AND movement_type = 'Tank Reading'
+            AND DATE(created_at) = CURRENT_DATE
+        """, (fuel_type,))
+
+        cur.execute("""
+            INSERT INTO fuel_movements (
+                fuel_type,
+                movement_type,
+                liters,
+                note,
+                created_at
+            )
+            VALUES (%s, %s, %s, %s, %s)
+        """, (
+            fuel_type,
+            movement_type,
+            liters,
+            note,
+            datetime.now()
+        ))
+
+    else:
+        # Delivery or Sold
+        cur.execute("""
+            INSERT INTO fuel_movements (
+                fuel_type,
+                movement_type,
+                liters,
+                note,
+                created_at
+            )
+            VALUES (%s, %s, %s, %s, %s)
+        """, (
+            fuel_type,
+            movement_type,
+            liters,
+            note,
+            datetime.now()
+        ))
 
     conn.commit()
     cur.close()
