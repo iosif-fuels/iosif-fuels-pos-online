@@ -142,7 +142,7 @@ def sell_accessory():
         conn.close()
         return "Not enough stock"
 
-    total = float(accessory["price"]) * qty_sold
+    total = float(accessory["sell_price"]) * qty_sold
 
     cur.execute("""
         INSERT INTO transactions (customer_id, type, item, amount, car_reg, date)
