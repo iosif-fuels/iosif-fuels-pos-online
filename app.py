@@ -624,7 +624,7 @@ def accessories_statement():
 """, (selected_month,))
 monthly_totals = cur.fetchone()
     
-    return render_template(
+      return render_template(
         "accessories_statement.html",
         accessories=accessories,
         accessory_sales=accessory_sales,
