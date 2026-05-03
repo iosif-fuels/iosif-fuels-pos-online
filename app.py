@@ -56,8 +56,8 @@ def index():
     )
 
 
-@app.route("/add_customer", methods=["POST"])
-def add_customer():
+@app.route("/_customer", methods=["POST"])
+def _customer():
     name = request.form.get("name")
     phone = request.form.get("phone")
     credit_limit = request.form.get("credit_limit") or 0
@@ -105,14 +105,15 @@ def charge():
 def add_accessory():
     name = request.form.get("name")
     qty = request.form.get("qty") or 0
-    price = request.form.get("price") or 0
+    buy_price = request.form.get("buy_price") or 0
+    sell_price = request.form.get("sell_price") or 0
 
     conn = get_db()
     cur = conn.cursor()
     cur.execute("""
-        INSERT INTO accessories (name, qty, price)
-        VALUES (%s, %s, %s)
-    """, (name, qty, price))
+        INSERT INTO accessories (name, qty, buy_price, sell_price, price)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (name, qty, buy_price, sell_price, sell_price))
     conn.commit()
     cur.close()
     conn.close()
