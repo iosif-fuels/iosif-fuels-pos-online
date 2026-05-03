@@ -389,13 +389,134 @@ def customer_statement(customer_id):
     )
 @app.route("/daily_report_pdf")
 def daily_report_pdf():
-    return "Daily PDF route working"
+    today = date.today()
+
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("""
+        SELECT t.*, c.name AS customer_name
+        FROM transactions t
+        LEFT JOIN customers c ON c.id = t.customer_id
+        WHERE DATE(t.date) = %s
+        ORDER BY t.id DESC
+    """, (today,))
+    transactions = cur.fetchall()
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount),0) AS total
+        FROM transactions
+        WHERE DATE(date) = %s AND amount > 0
+    """, (today,))
+    daily_sales = cur.fetchone()["total"]
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount),0) AS total
+        FROM transactions
+        WHERE DATE(date) = %s AND amount < 0
+    """, (today,))
+    daily_payments = abs(cur.fetchone()["total"])
+
+    cur.close()
+    conn.close()
+
+    from io import BytesIO
+    from flask import send_file
+    from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet
+
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer)
+    styles = getSampleStyleSheet()
+    elements = []
+
+    elements.append(Paragraph("IOSIF FUELS DAILY REPORT", styles["Title"]))
+    elements.append(Paragraph(str(today), styles["Heading2"]))
+    elements.append(Spacer(1, 20))
+
+    elements.append(Paragraph(f"Sales: EUR {daily_sales}", styles["Normal"]))
+    elements.append(Paragraph(f"Payments: EUR {daily_payments}", styles["Normal"]))
+    elements.append(Spacer(1, 20))
+
+    data = [["Date", "Customer", "Type", "Item", "Amount"]]
+
+    for t in transactions:
+        data.append([
+            str(t["date"]),
+            t["customer_name"] or "Cash",
+            t["type"],
+            t["item"],
+            str(t["amount"])
+        ])
+
+    table = Table(data)
+    elements.append(table)
+
+    doc.build(elements)
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=False,
+        download_name="daily_report.pdf",
+        mimetype="application/pdf"
+    )
 
 
 @app.route("/monthly_report_pdf")
 def monthly_report_pdf():
     selected_month = request.args.get("month", date.today().strftime("%Y-%m"))
-    return f"Monthly PDF route working for {selected_month}"
+
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("""
+        SELECT *
+        FROM transactions
+        WHERE TO_CHAR(date, 'YYYY-MM') = %s
+        ORDER BY date DESC
+    """, (selected_month,))
+    transactions = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    from io import BytesIO
+    from flask import send_file
+    from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet
+
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer)
+    styles = getSampleStyleSheet()
+    elements = []
+
+    elements.append(Paragraph("IOSIF FUELS MONTHLY REPORT", styles["Title"]))
+    elements.append(Paragraph(selected_month, styles["Heading2"]))
+    elements.append(Spacer(1, 20))
+
+    data = [["Date", "Type", "Item", "Amount"]]
+
+    for t in transactions:
+        data.append([
+            str(t["date"]),
+            t["type"],
+            t["item"],
+            str(t["amount"])
+        ])
+
+    table = Table(data)
+    elements.append(table)
+
+    doc.build(elements)
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=False,
+        download_name="monthly_report.pdf",
+        mimetype="application/pdf"
+    )
 
 
 if __name__ == "__main__":
