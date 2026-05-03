@@ -632,5 +632,80 @@ def accessories_statement():
         monthly_totals=monthly_totals
     )
 
+@app.route("/fuel_stock")
+def fuel_stock():
+    fuel_types = [
+        "Unleaded 95",
+        "Unleaded 98",
+        "Eurodiesel",
+        "Heating Diesel",
+        "Kerosene",
+        "Agriculture Diesel"
+    ]
+
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    current_stock = []
+
+    for fuel in fuel_types:
+        cur.execute("""
+            SELECT COALESCE(SUM(
+                CASE 
+                    WHEN movement_type IN ('Opening Stock', 'Delivery') THEN liters
+                    WHEN movement_type = 'Sold' THEN -liters
+                    ELSE 0
+                END
+            ), 0) AS liters
+            FROM fuel_movements
+            WHERE fuel_type = %s
+        """, (fuel,))
+        liters = cur.fetchone()["liters"]
+
+        current_stock.append({
+            "fuel_type": fuel,
+            "liters": liters
+        })
+
+    cur.execute("""
+        SELECT *
+        FROM fuel_movements
+        ORDER BY created_at DESC
+        LIMIT 50
+    """)
+    movements = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "fuel_stock.html",
+        fuel_types=fuel_types,
+        current_stock=current_stock,
+        movements=movements
+    )
+
+
+@app.route("/add_fuel_movement", methods=["POST"])
+def add_fuel_movement():
+    fuel_type = request.form.get("fuel_type")
+    movement_type = request.form.get("movement_type")
+    liters = request.form.get("liters") or 0
+    note = request.form.get("note")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO fuel_movements (fuel_type, movement_type, liters, note, created_at)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (fuel_type, movement_type, liters, note, datetime.now()))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for("fuel_stock"))
+
 if __name__ == "__main__":
     app.run(debug=True)
