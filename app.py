@@ -612,6 +612,18 @@ def accessories_statement():
     cur.close()
     conn.close()
 
+    cur.execute("""
+    SELECT 
+        COALESCE(SUM(t.amount), 0) AS total_sell,
+        COALESCE(SUM(a.buy_price), 0) AS total_buy
+    FROM transactions t
+    LEFT JOIN accessories a
+        ON t.item LIKE a.name || '%'
+    WHERE t.type = 'Accessories'
+    AND TO_CHAR(t.date, 'YYYY-MM') = %s
+""", (selected_month,))
+monthly_totals = cur.fetchone()
+    
     return render_template(
         "accessories_statement.html",
         accessories=accessories,
