@@ -628,8 +628,8 @@ monthly_totals = cur.fetchone()
         "accessories_statement.html",
         accessories=accessories,
         accessory_sales=accessory_sales,
-        selected_month=selected_month
-        monthly_totals=monthly_totals
+        selected_month=selected_month,
+        monthly_totals=monthly_totals,
     )
 
 if __name__ == "__main__":
