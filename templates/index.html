@@ -62,7 +62,7 @@
                 <select name="accessory_id">
                     {% for a in accessories %}
                     <option value="{{ a.id }}">
-                        {{ a.name }} - €{{ "%.2f"|format(a.sell_price) }} - Stock: {{ a.qty }}
+                        {{ a.name }} - €{{ "%.2f"|format(a.sell_price or a.price) }} - Stock: {{ a.qty }}
                     </option>
                     {% endfor %}
                 </select>
