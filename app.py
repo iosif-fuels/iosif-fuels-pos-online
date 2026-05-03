@@ -585,6 +585,8 @@ def customer_statement_pdf(customer_id):
 
 @app.route("/accessories_statement")
 def accessories_statement():
+    selected_month = request.args.get("month", date.today().strftime("%Y-%m"))
+
     conn = get_db()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
@@ -601,9 +603,10 @@ def accessories_statement():
             SUM(amount) AS total_sales
         FROM transactions
         WHERE type = 'Accessories'
+        AND TO_CHAR(date, 'YYYY-MM') = %s
         GROUP BY item
         ORDER BY total_sales DESC
-    """)
+    """, (selected_month,))
     accessory_sales = cur.fetchall()
 
     cur.close()
@@ -612,7 +615,8 @@ def accessories_statement():
     return render_template(
         "accessories_statement.html",
         accessories=accessories,
-        accessory_sales=accessory_sales
+        accessory_sales=accessory_sales,
+        selected_month=selected_month
     )
 
 if __name__ == "__main__":
