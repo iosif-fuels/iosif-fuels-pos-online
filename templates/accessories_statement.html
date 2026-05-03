@@ -1,1 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Accessories Statement</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
 
+<div class="container">
+    <h1>Accessories Statement</h1>
+
+    <div class="nav">
+        <a href="/">POS</a>
+        <a href="/reports">Daily Report</a>
+        <a href="/monthly_report">Monthly Report</a>
+    </div>
+
+    <div class="card">
+        <h2>Accessories Stock</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Qty</th>
+                <th>Buy Price</th>
+                <th>Sell Price</th>
+                <th>Profit / Piece</th>
+            </tr>
+
+            {% for a in accessories %}
+            <tr>
+                <td>{{ a.name }}</td>
+                <td>{{ a.qty }}</td>
+                <td>€{{ "%.2f"|format(a.buy_price or 0) }}</td>
+                <td>€{{ "%.2f"|format(a.sell_price or 0) }}</td>
+                <td>€{{ "%.2f"|format((a.sell_price or 0) - (a.buy_price or 0)) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Accessories Sales Statement</h2>
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Total Sales</th>
+            </tr>
+
+            {% for s in accessory_sales %}
+            <tr>
+                <td>{{ s.item }}</td>
+                <td>€{{ "%.2f"|format(s.total_sales or 0) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
