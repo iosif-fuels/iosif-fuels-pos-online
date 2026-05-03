@@ -518,6 +518,69 @@ def monthly_report_pdf():
         mimetype="application/pdf"
     )
 
+@app.route("/customer_statement_pdf/<int:customer_id>")
+def customer_statement_pdf(customer_id):
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("SELECT * FROM customers WHERE id = %s", (customer_id,))
+    customer = cur.fetchone()
+
+    cur.execute("""
+        SELECT *
+        FROM transactions
+        WHERE customer_id = %s
+        ORDER BY date DESC
+    """, (customer_id,))
+    transactions = cur.fetchall()
+
+    cur.execute("""
+        SELECT COALESCE(SUM(amount), 0) AS balance
+        FROM transactions
+        WHERE customer_id = %s
+    """, (customer_id,))
+    balance = cur.fetchone()["balance"]
+
+    cur.close()
+    conn.close()
+
+    from io import BytesIO
+    from flask import send_file
+    from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet
+
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer)
+    styles = getSampleStyleSheet()
+    elements = []
+
+    elements.append(Paragraph(f"Customer Statement - {customer['name']}", styles["Title"]))
+    elements.append(Paragraph(f"Phone: {customer['phone']}", styles["Normal"]))
+    elements.append(Paragraph(f"Balance: EUR {balance}", styles["Normal"]))
+    elements.append(Spacer(1, 20))
+
+    data = [["Date", "Type", "Item", "Amount"]]
+
+    for t in transactions:
+        data.append([
+            str(t["date"]),
+            t["type"],
+            t["item"],
+            str(t["amount"])
+        ])
+
+    table = Table(data)
+    elements.append(table)
+
+    doc.build(elements)
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=False,
+        download_name=f"{customer['name']}_statement.pdf",
+        mimetype="application/pdf"
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
