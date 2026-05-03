@@ -34,8 +34,8 @@
                 <td>€{{ "%.2f"|format(c.credit_limit) }}</td>
                 <td>€{{ "%.2f"|format(c.balance) }}</td>
                 <td>
-                    <a href="/customer_statement/{{ c.id }}">
-                        Open Statement
+                    <a href="/customer_statement_pdf/{{ c.id }}" target="_blank">
+                        PDF Statement
                     </a>
                 </td>
             </tr>
