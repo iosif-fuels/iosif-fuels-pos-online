@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fuel Tank Stock</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Fuel Tank Stock</h1>
+
+    <div class="nav">
+        <a href="/">POS</a>
+        <a href="/reports">Daily Report</a>
+        <a href="/monthly_report">Monthly Report</a>
+        <a href="/accessories_statement">Accessories</a>
+    </div>
+
+    <div class="card">
+        <h2>Current Tank Stock</h2>
+        <table>
+            <tr>
+                <th>Fuel Type</th>
+                <th>Current Liters</th>
+            </tr>
+
+            {% for s in current_stock %}
+            <tr>
+                <td>{{ s.fuel_type }}</td>
+                <td>{{ "%.2f"|format(s.liters or 0) }} L</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Add Fuel Movement</h2>
+
+        <form method="POST" action="/add_fuel_movement">
+
+            <select name="fuel_type" required>
+                {% for f in fuel_types %}
+                <option value="{{ f }}">{{ f }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="movement_type" required>
+                <option value="Opening Stock">Morning Tank Reading / Opening Stock</option>
+                <option value="Delivery">Fuel Delivery / Bought Fuel</option>
+                <option value="Sold">Fuel Sold</option>
+            </select>
+
+            <input type="number" step="0.01" name="liters" placeholder="Liters" required>
+
+            <input name="note" placeholder="Note / Invoice / Details">
+
+            <button type="submit">Save Fuel Movement</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Latest Fuel Movements</h2>
+
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Fuel</th>
+                <th>Type</th>
+                <th>Liters</th>
+                <th>Note</th>
+            </tr>
+
+            {% for m in movements %}
+            <tr>
+                <td>{{ m.created_at }}</td>
+                <td>{{ m.fuel_type }}</td>
+                <td>{{ m.movement_type }}</td>
+                <td>{{ "%.2f"|format(m.liters or 0) }} L</td>
+                <td>{{ m.note }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
