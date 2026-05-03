@@ -615,7 +615,7 @@ def accessories_statement():
             COALESCE(SUM(a.buy_price), 0) AS total_buy
         FROM transactions t
         LEFT JOIN accessories a
-            ON t.item LIKE a.name || '%'
+            ON t.item LIKE a.name || '%%'
         WHERE t.type = 'Accessories'
         AND TO_CHAR(t.date, 'YYYY-MM') = %s
     """, (selected_month,))
