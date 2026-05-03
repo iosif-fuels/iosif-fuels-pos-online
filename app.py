@@ -583,5 +583,37 @@ def customer_statement_pdf(customer_id):
         mimetype="application/pdf"
     )
 
+@app.route("/accessories_statement")
+def accessories_statement():
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("""
+        SELECT *
+        FROM accessories
+        ORDER BY name
+    """)
+    accessories = cur.fetchall()
+
+    cur.execute("""
+        SELECT 
+            item,
+            SUM(amount) AS total_sales
+        FROM transactions
+        WHERE type = 'Accessories'
+        GROUP BY item
+        ORDER BY total_sales DESC
+    """)
+    accessory_sales = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "accessories_statement.html",
+        accessories=accessories,
+        accessory_sales=accessory_sales
+    )
+
 if __name__ == "__main__":
     app.run(debug=True)
