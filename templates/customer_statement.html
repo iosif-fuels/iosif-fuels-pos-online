@@ -1,1 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Customer Statement</h1>
 
+<p>Name: {{ customer.name }}</p>
+<p>Balance: €{{ "%.2f"|format(balance) }}</p>
+
+<table border="1">
+<tr><th>Date</th><th>Type</th><th>Item</th><th>Amount</th></tr>
+{% for t in transactions %}
+<tr>
+<td>{{ t.date }}</td>
+<td>{{ t.type }}</td>
+<td>{{ t.item }}</td>
+<td>€{{ "%.2f"|format(t.amount) }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<a href="/customers">Back</a>
+</body>
+</html>
