@@ -629,6 +629,7 @@ monthly_totals = cur.fetchone()
         accessories=accessories,
         accessory_sales=accessory_sales,
         selected_month=selected_month
+        monthly_totals=monthly_totals
     )
 
 if __name__ == "__main__":
