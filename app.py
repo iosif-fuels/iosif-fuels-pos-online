@@ -749,5 +749,25 @@ def add_fuel_movement():
 
     return redirect(url_for("fuel_stock"))
 
+@app.route("/add_customer", methods=["POST"])
+def add_customer():
+    name = request.form.get("name")
+    phone = request.form.get("phone")
+    credit_limit = request.form.get("credit_limit") or 0
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO customers (name, phone, credit_limit)
+        VALUES (%s, %s, %s)
+    """, (name, phone, credit_limit))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for("index"))
+
 if __name__ == "__main__":
     app.run(debug=True)
