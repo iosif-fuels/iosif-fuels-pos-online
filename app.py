@@ -387,6 +387,16 @@ def customer_statement(customer_id):
         transactions=transactions,
         balance=balance
     )
+@app.route("/daily_report_pdf")
+def daily_report_pdf():
+    return "Daily PDF route working"
+
+
+@app.route("/monthly_report_pdf")
+def monthly_report_pdf():
+    selected_month = request.args.get("month", date.today().strftime("%Y-%m"))
+    return f"Monthly PDF route working for {selected_month}"
+
 
 if __name__ == "__main__":
     app.run(debug=True)
