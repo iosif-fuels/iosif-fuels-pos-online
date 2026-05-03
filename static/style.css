@@ -1,95 +1,114 @@
 body {
     margin: 0;
-    padding: 0;
     font-family: Arial, sans-serif;
-    background: #f4f6f8;
+    background: #eef2f7;
+    color: #111827;
 }
 
 .container {
-    width: 95%;
+    width: 96%;
+    max-width: 1400px;
     margin: auto;
     padding: 20px;
 }
 
 h1 {
-    text-align: center;
-    margin-bottom: 30px;
+    background: #111827;
+    color: white;
+    padding: 22px;
+    border-radius: 14px;
+    margin-bottom: 20px;
 }
 
 .nav {
     margin-bottom: 20px;
-    text-align: center;
 }
 
 .nav a {
-    text-decoration: none;
-    background: #1f2937;
+    background: #2563eb;
     color: white;
-    padding: 10px 15px;
+    padding: 14px 18px;
     margin: 5px;
-    border-radius: 8px;
+    border-radius: 10px;
     display: inline-block;
+    font-weight: bold;
 }
 
 .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 18px;
 }
 
 .card {
     background: white;
-    padding: 20px;
+    padding: 22px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
     margin-bottom: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
-form input,
-form select,
-form button {
+.card h2 {
+    margin-top: 0;
+    border-bottom: 2px solid #eef2f7;
+    padding-bottom: 10px;
+}
+
+input, select, button {
     width: 100%;
-    padding: 12px;
+    padding: 15px;
     margin: 8px 0;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
     box-sizing: border-box;
 }
 
 button {
-    background: #2563eb;
+    background: #16a34a;
     color: white;
     border: none;
-    border-radius: 8px;
+    font-weight: bold;
     cursor: pointer;
 }
 
 button:hover {
-    opacity: 0.9;
+    background: #15803d;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    background: white;
 }
 
-table th,
-table td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
+th {
+    background: #111827;
+    color: white;
+}
+
+th, td {
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
     text-align: left;
 }
 
-table th {
-    background: #f1f1f1;
+tr:hover {
+    background: #f9fafb;
 }
 
 a {
     color: #2563eb;
+    font-weight: bold;
     text-decoration: none;
 }
 
 @media (max-width: 900px) {
     .grid {
         grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 24px;
     }
 }
