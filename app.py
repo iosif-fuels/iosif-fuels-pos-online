@@ -78,31 +78,8 @@ def _customer():
     return redirect(url_for("index"))
 
 
-@app.route("/charge", methods=["POST"])
-def charge():
-    customer_id = request.form.get("customer_id")
-    trans_type = request.form.get("type")
-    item = request.form.get("item")
-    amount = float(request.form.get("amount") or 0)
-    car_reg = request.form.get("car_reg")
-
-    if trans_type == "Payment":
-        amount = -abs(amount)
-    else:
-        amount = abs(amount)
-
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("""
-        INSERT INTO transactions (customer_id, type, item, amount, car_reg, date)
-        VALUES (%s, %s, %s, %s, %s, %s)
-    """, (customer_id, trans_type, item, amount, car_reg, datetime.now()))
-    cur.execute("SELECT MAX(id) FROM transactions")
-transaction_id = cur.fetchone()[0]
-
-    cur.execute("SELECT name FROM customers WHERE id = %s", (customer_id,))
-    customer = cur.fetchone()
     customer_name = customer[0] if customer else ""
+
     cur.execute("""
         INSERT INTO receipts (transaction_id, receipt_type, customer_name, item, amount, created_at)
         VALUES (%s, %s, %s, %s, %s, %s)
@@ -117,9 +94,11 @@ transaction_id = cur.fetchone()[0]
     ))
 
     receipt_id = cur.fetchone()[0]
+
     conn.commit()
     cur.close()
     conn.close()
+
     return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
 
 @app.route("/add_accessory", methods=["POST"])
