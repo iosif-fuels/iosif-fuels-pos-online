@@ -28,24 +28,30 @@
                 <th>Delete</th>
             </tr>
 
-            {% for c in customers %}
-            <tr>
-                <td>{{ c.name }}</td>
-                <td>{{ c.phone }}</td>
-                <td>€{{ "%.2f"|format(c.credit_limit) }}</td>
-                <td>€{{ "%.2f"|format(c.balance) }}</td>
-                <td>
-                    <a href="/customer_statement_pdf/{{ c.id }}" target="_blank">
-                        PDF Statement
-                    </a>
-                    <td>
-    <form method="POST" action="/delete_customer/{{ c.id }}" onsubmit="return confirm('Delete this customer and all transactions?');">
-        <button type="submit" style="background:red;">Delete</button>
-    </form>
-</td>
-                </td>
-            </tr>
-            {% endfor %}
+           {% for c in customers %}
+<tr>
+    <td>{{ c.name }}</td>
+    <td>{{ c.phone }}</td>
+    <td>€{{ "%.2f"|format(c.credit_limit) }}</td>
+    <td>€{{ "%.2f"|format(c.balance) }}</td>
+
+    <td>
+        <a href="/customer_statement_pdf/{{ c.id }}" target="_blank">
+            PDF Statement
+        </a>
+    </td>
+
+    <td>
+        <form method="POST"
+              action="/delete_customer/{{ c.id }}"
+              onsubmit="return confirm('Delete this customer and all transactions?');">
+            <button type="submit" style="background:red;">
+                Delete
+            </button>
+        </form>
+    </td>
+</tr>
+{% endfor %}
         </table>
     </div>
 
