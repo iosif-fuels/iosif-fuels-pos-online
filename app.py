@@ -159,7 +159,14 @@ def sell_accessory():
 transaction_id = cur.fetchone()[0]
 
 cur.execute("""
-    INSERT INTO receipts (transaction_id, receipt_type, customer_name, item, amount, created_at)
+    INSERT INTO receipts (
+        transaction_id,
+        receipt_type,
+        customer_name,
+        item,
+        amount,
+        created_at
+    )
     VALUES (%s, %s, %s, %s, %s, %s)
     RETURNING id
 """, (
@@ -171,17 +178,19 @@ cur.execute("""
     datetime.now()
 ))
 
-    receipt_id = cur.fetchone()[0]
-    cur.execute("""
-        UPDATE accessories
-        SET qty = qty - %s
-        WHERE id = %s
-    """, (qty_sold, accessory_id))
+receipt_id = cur.fetchone()[0]
 
-    conn.commit()
-    cur.close()
-    conn.close()
-    return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
+cur.execute("""
+    UPDATE accessories
+    SET qty = qty - %s
+    WHERE id = %s
+""", (qty_sold, accessory_id))
+
+conn.commit()
+cur.close()
+conn.close()
+
+return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
 
 @app.route("/reports")
 def reports():
