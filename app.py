@@ -801,6 +801,20 @@ def require_login():
 
     if not session.get("logged_in"):
         return redirect(url_for("login"))
+@app.route("/delete_customer/<int:customer_id>", methods=["POST"])
+def delete_customer(customer_id):
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("DELETE FROM transactions WHERE customer_id = %s", (customer_id,))
+    cur.execute("DELETE FROM customers WHERE id = %s", (customer_id,))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    flash("Customer deleted successfully")
+    return redirect(url_for("customers"))
 
 if __name__ == "__main__":
     app.run(debug=True)
