@@ -97,11 +97,32 @@ def charge():
         INSERT INTO transactions (customer_id, type, item, amount, car_reg, date)
         VALUES (%s, %s, %s, %s, %s, %s)
     """, (customer_id, trans_type, item, amount, car_reg, datetime.now()))
+    cur.execute("SELECT MAX(id) FROM transactions")
+transaction_id = cur.fetchone()[0]
+
+cur.execute("SELECT name FROM customers WHERE id = %s", (customer_id,))
+customer = cur.fetchone()
+customer_name = customer[0] if customer else ""
+
+cur.execute("""
+    INSERT INTO receipts (transaction_id, receipt_type, customer_name, item, amount, created_at)
+    VALUES (%s, %s, %s, %s, %s, %s)
+    RETURNING id
+""", (
+    transaction_id,
+    trans_type,
+    customer_name,
+    item,
+    amount,
+    datetime.now()
+))
+
+receipt_id = cur.fetchone()[0]
     conn.commit()
     cur.close()
     conn.close()
 
-    return redirect(url_for("index"))
+    
 
 
 @app.route("/add_accessory", methods=["POST"])
@@ -158,6 +179,23 @@ def sell_accessory():
         "Cash Sale",
         datetime.now()
     ))
+    cur.execute("SELECT MAX(id) FROM transactions")
+transaction_id = cur.fetchone()[0]
+
+cur.execute("""
+    INSERT INTO receipts (transaction_id, receipt_type, customer_name, item, amount, created_at)
+    VALUES (%s, %s, %s, %s, %s, %s)
+    RETURNING id
+""", (
+    transaction_id,
+    "Accessory Sale",
+    "Cash Sale",
+    accessory["name"] + " x " + str(qty_sold),
+    total,
+    datetime.now()
+))
+
+receipt_id = cur.fetchone()[0]
 
     cur.execute("""
         UPDATE accessories
@@ -169,7 +207,7 @@ def sell_accessory():
     cur.close()
     conn.close()
 
-    return redirect(url_for("index"))
+    return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
 
 
 @app.route("/reports")
