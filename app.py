@@ -7,6 +7,9 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 
 app = Flask(__name__)
 
+app.secret_key = "iosif_pos_secret_123"
+POS_PASSWORD = "1122"
+
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
@@ -768,6 +771,36 @@ def add_customer():
     conn.close()
 
     return redirect(url_for("index"))
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        password = request.form.get("password")
+
+        if password == POS_PASSWORD:
+            session["logged_in"] = True
+            return redirect(url_for("index"))
+
+        return render_template("login.html", error="Wrong password")
+
+    return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+
+@app.before_request
+def require_login():
+    allowed_routes = ["login", "static"]
+
+    if request.endpoint in allowed_routes:
+        return
+
+    if not session.get("logged_in"):
+        return redirect(url_for("login"))
 
 if __name__ == "__main__":
     app.run(debug=True)
