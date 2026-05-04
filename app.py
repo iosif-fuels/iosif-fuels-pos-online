@@ -3,7 +3,7 @@ from datetime import datetime, date
 
 import psycopg2
 import psycopg2.extras
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 
 app = Flask(__name__)
 
