@@ -104,18 +104,18 @@ cur.execute("SELECT name FROM customers WHERE id = %s", (customer_id,))
 customer = cur.fetchone()
 customer_name = customer[0] if customer else ""
 
-cur.execute("""
-    INSERT INTO receipts (transaction_id, receipt_type, customer_name, item, amount, created_at)
-    VALUES (%s, %s, %s, %s, %s, %s)
-    RETURNING id
-""", (
-    transaction_id,
-    trans_type,
-    customer_name,
-    item,
-    amount,
-    datetime.now()
-))
+    cur.execute("""
+        INSERT INTO receipts (transaction_id, receipt_type, customer_name, item, amount, created_at)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        RETURNING id
+    """, (
+        transaction_id,
+        trans_type,
+        customer_name,
+        item,
+        amount,
+        datetime.now()
+    ))
 
     receipt_id = cur.fetchone()[0]
 
