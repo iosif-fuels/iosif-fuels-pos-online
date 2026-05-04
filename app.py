@@ -100,8 +100,8 @@ def charge():
     cur.execute("SELECT MAX(id) FROM transactions")
 transaction_id = cur.fetchone()[0]
 
-cur.execute("SELECT name FROM customers WHERE id = %s", (customer_id,))
-customer = cur.fetchone()
+    cur.execute("SELECT name FROM customers WHERE id = %s", (customer_id,))
+    customer = cur.fetchone()
     customer_name = customer[0] if customer else ""
     cur.execute("""
         INSERT INTO receipts (transaction_id, receipt_type, customer_name, item, amount, created_at)
