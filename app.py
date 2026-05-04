@@ -118,9 +118,9 @@ cur.execute("""
 
 receipt_id = cur.fetchone()[0]
 
-conn.commit()
-cur.close()
-conn.close()
+    conn.commit()
+    cur.close()
+    conn.close()
 
     return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
 
