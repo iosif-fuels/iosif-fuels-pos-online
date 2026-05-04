@@ -102,70 +102,7 @@ def _customer():
     return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
 
 @app.route("/sell_accessory", methods=["POST"])
-def sell_accessory():
-    accessory_id = request.form.get("accessory_id")
-    qty_sold = int(request.form.get("qty") or 1)
 
-    conn = get_db()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-    cur.execute("SELECT * FROM accessories WHERE id = %s", (accessory_id,))
-    accessory = cur.fetchone()
-
-    if not accessory:
-        cur.close()
-        conn.close()
-        return "Accessory not found"
-
-    if accessory["qty"] < qty_sold:
-        cur.close()
-        conn.close()
-        return "Not enough stock"
-
-    total = float(accessory["sell_price"] or accessory["price"]) * qty_sold
-    item_text = accessory["name"] + " x " + str(qty_sold)
-
-    cur.execute("""
-        INSERT INTO transactions (customer_id, type, item, amount, car_reg, date)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        RETURNING id
-    """, (
-        None,
-        "Accessories",
-        item_text,
-        total,
-        "Cash Sale",
-        datetime.now()
-    ))
-
-    transaction_id = cur.fetchone()[0]
-
-    cur.execute("""
-        INSERT INTO receipts (transaction_id, receipt_type, customer_name, item, amount, created_at)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        RETURNING id
-    """, (
-        transaction_id,
-        "Accessory Sale",
-        "Cash Sale",
-        item_text,
-        total,
-        datetime.now()
-    ))
-
-    receipt_id = cur.fetchone()[0]
-
-    cur.execute("""
-        UPDATE accessories
-        SET qty = qty - %s
-        WHERE id = %s
-    """, (qty_sold, accessory_id))
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-    return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
 
 @app.route("/add_accessory", methods=["POST"])
 def add_accessory():
