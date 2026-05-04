@@ -171,9 +171,8 @@ cur.execute("""
     datetime.now()
 ))
 
-receipt_id = cur.fetchone()[0]
-
-cur.execute("""
+    receipt_id = cur.fetchone()[0]
+    cur.execute("""
     UPDATE accessories
     SET qty = qty - %s
     WHERE id = %s
