@@ -106,6 +106,7 @@
                 <th>Type</th>
                 <th>Item</th>
                 <th>Amount</th>
+                <th>Void</th>
             </tr>
 
             {% for t in transactions %}
@@ -115,6 +116,15 @@
                 <td>{{ t.type }}</td>
                 <td>{{ t.item }}</td>
                 <td>€{{ "%.2f"|format(t.amount) }}</td>
+                <td>
+    {% if not t.voided %}
+    <form method="POST" action="/void_transaction/{{ t.id }}">
+        <button type="submit">Void</button>
+    </form>
+    {% else %}
+    VOIDED
+    {% endif %}
+</td>
             </tr>
             {% endfor %}
         </table>
