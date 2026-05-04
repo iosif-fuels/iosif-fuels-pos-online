@@ -200,18 +200,17 @@ cur.execute("""
 
 receipt_id = cur.fetchone()[0]
 
-    cur.execute("""
-        UPDATE accessories
-        SET qty = qty - %s
-        WHERE id = %s
-    """, (qty_sold, accessory_id))
+cur.execute("""
+    UPDATE accessories
+    SET qty = qty - %s
+    WHERE id = %s
+""", (qty_sold, accessory_id))
 
-    conn.commit()
-    cur.close()
-    conn.close()
+conn.commit()
+cur.close()
+conn.close()
 
-    return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
-
+return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
 
 @app.route("/reports")
 def reports():
