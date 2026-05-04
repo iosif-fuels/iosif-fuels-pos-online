@@ -173,10 +173,10 @@ cur.execute("""
 
     receipt_id = cur.fetchone()[0]
     cur.execute("""
-    UPDATE accessories
-    SET qty = qty - %s
-    WHERE id = %s
-""", (qty_sold, accessory_id))
+        UPDATE accessories
+        SET qty = qty - %s
+        WHERE id = %s
+    """, (qty_sold, accessory_id))
 
     conn.commit()
     cur.close()
