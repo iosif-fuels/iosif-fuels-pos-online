@@ -186,6 +186,17 @@ cur.execute("""
     WHERE id = %s
 """, (qty_sold, accessory_id))
 
+conn.commit()
+cur.close()
+conn.close()
+
+return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
+cur.execute("""
+    UPDATE accessories
+    SET qty = qty - %s
+    WHERE id = %s
+""", (qty_sold, accessory_id))
+
     conn.commit()
     cur.close()
     conn.close()
