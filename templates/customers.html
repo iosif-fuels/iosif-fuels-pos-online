@@ -25,6 +25,7 @@
                 <th>Credit Limit</th>
                 <th>Current Balance</th>
                 <th>Statement</th>
+                <th>Delete</th>
             </tr>
 
             {% for c in customers %}
@@ -37,6 +38,11 @@
                     <a href="/customer_statement_pdf/{{ c.id }}" target="_blank">
                         PDF Statement
                     </a>
+                    <td>
+    <form method="POST" action="/delete_customer/{{ c.id }}" onsubmit="return confirm('Delete this customer and all transactions?');">
+        <button type="submit" style="background:red;">Delete</button>
+    </form>
+</td>
                 </td>
             </tr>
             {% endfor %}
