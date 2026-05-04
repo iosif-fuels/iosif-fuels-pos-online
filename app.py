@@ -869,27 +869,74 @@ def receipt_pdf(receipt_id):
     cur.close()
     conn.close()
 
+    if not receipt:
+        return "Receipt not found"
+
     from io import BytesIO
     from flask import send_file
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
     from reportlab.lib.styles import getSampleStyleSheet
 
+    vat_rate = 0.19
+    total = float(receipt["amount"])
+    net = round(total / (1 + vat_rate), 2)
+    vat = round(total - net, 2)
+
     buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer)
+
+    # Thermal receipt width
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=(220, 600),
+        rightMargin=10,
+        leftMargin=10,
+        topMargin=10,
+        bottomMargin=10
+    )
+
     styles = getSampleStyleSheet()
     elements = []
 
-    elements.append(Paragraph("IOSIF P IOSIF TRADING LTD", styles["Title"]))
-    elements.append(Paragraph(f"Receipt No: {receipt['id']}", styles["Normal"]))
-    elements.append(Paragraph(f"Date: {receipt['created_at']}", styles["Normal"]))
-    elements.append(Spacer(1, 15))
+    elements.append(Paragraph("IOSIF P. IOSIF TRADING LTD", styles["Title"]))
+    elements.append(Paragraph("10, Marion Street", styles["Normal"]))
+    elements.append(Paragraph("TEL: 26321425", styles["Normal"]))
+    elements.append(Paragraph("VAT REG. NO: 10162349G", styles["Normal"]))
+    elements.append(Spacer(1, 10))
 
-    elements.append(Paragraph(f"Type: {receipt['receipt_type']}", styles["Heading2"]))
-    elements.append(Paragraph(f"Customer: {receipt['customer_name'] or 'Cash Sale'}", styles["Normal"]))
-    elements.append(Paragraph(f"Item: {receipt['item']}", styles["Normal"]))
-    elements.append(Paragraph(f"Amount: EUR {receipt['amount']}", styles["Heading2"]))
+    elements.append(Paragraph("--------------------------------------", styles["Normal"]))
+    elements.append(Paragraph("PRODUCT   PRICE   QTY   VALUE", styles["Normal"]))
+    elements.append(
+        Paragraph(
+            f"{receipt['item']}   {receipt['amount']}   1   {receipt['amount']}",
+            styles["Normal"]
+        )
+    )
+    elements.append(Paragraph("--------------------------------------", styles["Normal"]))
+
+    elements.append(
+        Paragraph(f"TOTAL (€): {receipt['amount']}", styles["Heading2"])
+    )
+
+    elements.append(Paragraph("--------------------------------------", styles["Normal"]))
+    elements.append(Paragraph("RATE   CODE   NET   VAT   TOTAL", styles["Normal"]))
+    elements.append(
+        Paragraph(
+            f"19%    A    {net}   {vat}   {total}",
+            styles["Normal"]
+        )
+    )
+
+    elements.append(Paragraph("--------------------------------------", styles["Normal"]))
+    elements.append(
+        Paragraph(f"DATE: {receipt['created_at']}", styles["Normal"])
+    )
+    elements.append(Paragraph("CASHIER: IOSIF", styles["Normal"]))
+    elements.append(
+        Paragraph(f"RECEIPT NO: {receipt['id']}", styles["Normal"])
+    )
 
     doc.build(elements)
+
     buffer.seek(0)
 
     return send_file(
