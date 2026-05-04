@@ -946,5 +946,22 @@ def receipt_pdf(receipt_id):
         mimetype="application/pdf"
     )
 
+@app.route("/void_transaction/<int:transaction_id>", methods=["POST"])
+def void_transaction(transaction_id):
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE transactions
+        SET voided = TRUE
+        WHERE id = %s
+    """, (transaction_id,))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for("index"))
+
 if __name__ == "__main__":
     app.run(debug=True)
