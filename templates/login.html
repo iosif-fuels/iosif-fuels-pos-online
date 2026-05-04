@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>POS Login</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="card" style="max-width:400px; margin:80px auto;">
+        <h1>IOSIF FUELS POS</h1>
+        <h2>Login</h2>
+
+        {% if error %}
+            <p style="color:red; font-weight:bold;">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" action="/login">
+            <input type="password" name="password" placeholder="Enter Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
