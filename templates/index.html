@@ -8,6 +8,7 @@
 
 <div class="container">
     <h1>IOSIF FUELS POS</h1>
+    <div id="clock" style="font-size:20px; font-weight:bold; margin-bottom:15px;"></div>
 
     <div class="grid">
 
@@ -130,5 +131,20 @@
 
 </div>
 
+    <script>
+function updateClock() {
+    const now = new Date();
+
+    const date = now.toLocaleDateString();
+    const time = now.toLocaleTimeString();
+
+    document.getElementById("clock").innerHTML =
+        date + " | " + time;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+    
 </body>
 </html>
