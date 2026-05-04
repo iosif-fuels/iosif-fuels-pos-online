@@ -122,7 +122,7 @@ conn.commit()
 cur.close()
 conn.close()
 
-return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
+    return redirect(url_for("receipt_pdf", receipt_id=receipt_id))
 
 @app.route("/add_accessory", methods=["POST"])
 def add_accessory():
