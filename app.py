@@ -815,6 +815,46 @@ def delete_customer(customer_id):
 
     flash("Customer deleted successfully")
     return redirect(url_for("customers"))
+@app.route("/receipt_pdf/<int:receipt_id>")
+def receipt_pdf(receipt_id):
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("SELECT * FROM receipts WHERE id = %s", (receipt_id,))
+    receipt = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    from io import BytesIO
+    from flask import send_file
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet
+
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer)
+    styles = getSampleStyleSheet()
+    elements = []
+
+    elements.append(Paragraph("IOSIF P IOSIF TRADING LTD", styles["Title"]))
+    elements.append(Paragraph(f"Receipt No: {receipt['id']}", styles["Normal"]))
+    elements.append(Paragraph(f"Date: {receipt['created_at']}", styles["Normal"]))
+    elements.append(Spacer(1, 15))
+
+    elements.append(Paragraph(f"Type: {receipt['receipt_type']}", styles["Heading2"]))
+    elements.append(Paragraph(f"Customer: {receipt['customer_name'] or 'Cash Sale'}", styles["Normal"]))
+    elements.append(Paragraph(f"Item: {receipt['item']}", styles["Normal"]))
+    elements.append(Paragraph(f"Amount: EUR {receipt['amount']}", styles["Heading2"]))
+
+    doc.build(elements)
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=False,
+        download_name=f"receipt_{receipt_id}.pdf",
+        mimetype="application/pdf"
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
