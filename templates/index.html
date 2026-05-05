@@ -67,17 +67,6 @@
                     </option>
                     {% endfor %}
                 </select>
-                <select name="sale_mode" required>
-    <option value="cash">Cash Sale</option>
-    <option value="customer">Charge Customer</option>
-</select>
-
-<select name="customer_id">
-    <option value="">Select customer if charging</option>
-    {% for c in customers %}
-    <option value="{{ c.id }}">{{ c.name }} - {{ c.phone }}</option>
-    {% endfor %}
-</select>
 
                 <input name="qty" type="number" value="1">
 
