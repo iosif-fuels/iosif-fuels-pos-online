@@ -95,7 +95,7 @@
 
             {% for t in transactions %}
             <tr>
-                <td>{{ t.date }}</td>
+                <td>{{ t.date.strftime('%d/%m/%Y %H:%M') }}</td>
                 <td>{{ t.customer_name }}</td>
                 <td>{{ t.type }}</td>
                 <td>{{ t.item }}</td>
