@@ -125,17 +125,16 @@
 
 </div>
 
-    <script>
+<script>
 function updateClock() {
     const now = new Date();
-
     const date = now.toLocaleDateString();
     const time = now.toLocaleTimeString();
 
     document.getElementById("clock").innerHTML =
         date + " | " + time;
 }
-<script>
+
 function updateChargeButton() {
     let type = document.getElementById("type").value;
     let button = document.getElementById("chargeButton");
@@ -149,10 +148,9 @@ function updateChargeButton() {
     }
 }
 
-window.onload = updateChargeButton;
-</script>
 setInterval(updateClock, 1000);
 updateClock();
+updateChargeButton();
 </script>
     
 </body>
