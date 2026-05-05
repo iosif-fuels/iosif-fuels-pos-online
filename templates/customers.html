@@ -26,6 +26,7 @@
                 <th>Current Balance</th>
                 <th>Statement</th>
                 <th>Delete</th>
+                <th>Edit</th>
             </tr>
 
            {% for c in customers %}
@@ -34,6 +35,9 @@
     <td>{{ c.phone }}</td>
     <td>€{{ "%.2f"|format(c.credit_limit) }}</td>
     <td>€{{ "%.2f"|format(c.balance) }}</td>
+    <td>
+    <a href="/edit_customer/{{ c.id }}">Edit</a>
+</td>
 
     <td>
         <a href="/customer_statement_pdf/{{ c.id }}" target="_blank">
