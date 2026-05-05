@@ -112,3 +112,17 @@ a {
         font-size: 24px;
     }
 }
+.top-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.manager-button {
+    background: #1f2937;
+    color: white;
+    padding: 14px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
