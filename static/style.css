@@ -126,3 +126,8 @@ a {
     text-decoration: none;
     font-weight: bold;
 }
+.logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 15px;
+}
