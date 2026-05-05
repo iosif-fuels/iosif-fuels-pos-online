@@ -102,7 +102,7 @@
                 <td>
     {% if not t.voided %}
     <form method="POST" action="/void_transaction/{{ t.id }}">
-        <button type="submit">Void</button>
+        <button type="submit" style="background:red;">Void</button>
     </form>
     {% else %}
     VOIDED
