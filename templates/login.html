@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>POS Login</title>
+    <title>Staff Login</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
 <div class="container">
-    <img src="{{ url_for('static', filename='1CDB7CBE-F23B-4604-B2D9-099702FD5C9E.png') }}" class="logo">
-    <div class="card" style="max-width:400px; margin:80px auto;">
+    <div class="card" style="max-width:420px; margin:80px auto; text-align:center;">
+        
+
+
         <h1>IOSIF FUELS POS</h1>
-        <h2>Login</h2>
+        <h2>Staff Login</h2>
 
         {% if error %}
             <p style="color:red; font-weight:bold;">{{ error }}</p>
         {% endif %}
 
         <form method="POST" action="/login">
-            <input type="password" name="password" placeholder="Enter Password" required>
+            <input type="password" name="password" placeholder="Enter Staff Password" required>
             <button type="submit">Login</button>
         </form>
+
+        <p style="font-size:13px; color:#6b7280; margin-top:20px;">
+            Secure POS Access
+        </p>
+
     </div>
 </div>
 
