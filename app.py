@@ -966,5 +966,35 @@ def void_transaction(transaction_id):
 def manager():
     return render_template("manager.html")
 
+@app.route("/edit_customer/<int:customer_id>", methods=["GET", "POST"])
+def edit_customer(customer_id):
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    if request.method == "POST":
+        name = request.form.get("name")
+        phone = request.form.get("phone")
+        credit_limit = request.form.get("credit_limit") or 0
+
+        cur.execute("""
+            UPDATE customers
+            SET name = %s, phone = %s, credit_limit = %s
+            WHERE id = %s
+        """, (name, phone, credit_limit, customer_id))
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return redirect(url_for("customers"))
+
+    cur.execute("SELECT * FROM customers WHERE id = %s", (customer_id,))
+    customer = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    return render_template("edit_customer.html", customer=customer)
+
 if __name__ == "__main__":
     app.run(debug=True)
