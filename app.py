@@ -800,6 +800,7 @@ def add_customer():
     name = request.form.get("name")
     phone = request.form.get("phone")
     credit_limit = request.form.get("credit_limit") or 0
+    opening_balance = float(request.form.get("opening_balance") or 0)
 
     conn = get_db()
     cur = conn.cursor()
@@ -807,13 +808,29 @@ def add_customer():
     cur.execute("""
         INSERT INTO customers (name, phone, credit_limit)
         VALUES (%s, %s, %s)
+        RETURNING id
     """, (name, phone, credit_limit))
+
+    customer_id = cur.fetchone()[0]
+
+    if opening_balance > 0:
+        cur.execute("""
+            INSERT INTO transactions (customer_id, type, item, amount, car_reg, date)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (
+            customer_id,
+            "Opening Balance",
+            "Previous Balance",
+            opening_balance,
+            "Opening Account",
+            datetime.now()
+        ))
 
     conn.commit()
     cur.close()
     conn.close()
 
-    return redirect(url_for("index"))
+    return redirect(url_for("manager"))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
