@@ -26,12 +26,10 @@
             <h2>Charge / Payment</h2>
             <form method="POST" action="/charge">
 
-                <input type="text" id="customerSearch" placeholder="Search customer...">
-                <select name="customer_id" id="customerSelect" required>
-                    {% for c in customers %}
-                    <option value="{{ c.id }}">{{ c.name }}-{{ c.phone }}</option>
-                    {% endfor %}
-                </select>
+                <input type="text" id="customerSearch" placeholder="Search customer..." autocomplete="off" required>
+<input type="hidden" name="customer_id" id="customerId">
+
+<div id="customerResults" class="search-results"></div>
 
                 <select name="type" id="type" onchange="updateChargeButton()">
                     <option>Fuel</option>
