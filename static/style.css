@@ -155,3 +155,21 @@ a {
     display: block;
     margin: 0 auto 20px auto;
 }
+.search-results {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.search-item {
+    padding: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.search-item:hover {
+    background: #f3f4f6;
+}
