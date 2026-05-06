@@ -22,7 +22,7 @@ def index():
     conn = get_db()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-    cur.execute("SELECT * FROM customers ORDER BY name")
+    cur.execute("SELECT * FROM transactions ORDER BY date DESC LIMIT 10")
     customers = cur.fetchall()
 
     cur.execute("SELECT * FROM accessories ORDER BY name")
