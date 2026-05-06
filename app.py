@@ -1012,6 +1012,22 @@ def edit_customer(customer_id):
     conn.close()
 
     return render_template("edit_customer.html", customer=customer)
+    @app.route("/products")
+def products():
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("""
+        SELECT *
+        FROM accessories
+        ORDER BY name
+    """)
+    products = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template("products.html", products=products)
 
 if __name__ == "__main__":
     app.run(debug=True)
