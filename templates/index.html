@@ -28,9 +28,9 @@
 
                <input type="text" id="customerSearch" placeholder="Search customer..." onkeyup="filterCustomers()">
 
-<select name="customer_id" id="customerSelect" required>
+                <select name="customer_id" id="customerSelect" size="10" required>
     {% for c in customers %}
-    <option value="{{ c.id }}">{{ c.name }} - {{ c.phone }}</option>
+    <option value="{{ c.id }}">{{ c.name }}{% if c.phone %} - {{ c.phone }}{% endif %}</option>
     {% endfor %}
 </select>
 
