@@ -120,16 +120,20 @@ a {
 
 .manager-button,
 .endday-button {
-    display: inline-block;
-    padding: 12px 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 220px;
+    height: 55px;
     border-radius: 10px;
     color: white;
     text-decoration: none;
     font-weight: bold;
     border: none;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 20px;
     margin-right: 10px;
+    box-sizing: border-box;
 }
 
 .manager-button {
@@ -140,8 +144,15 @@ a {
     background: #f97316;
 }
 
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
 .top-actions form {
-    display: inline;
+    margin: 0;
 }
 
 .logo {
