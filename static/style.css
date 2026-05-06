@@ -173,3 +173,7 @@ a {
 .search-item:hover {
     background: #f3f4f6;
 }
+.customer-scroll-box {
+    max-height: 500px;
+    overflow-y: auto;
+}
