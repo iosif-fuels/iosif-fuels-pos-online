@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Products</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Products</h1>
+
+    <div class="nav">
+        <a href="/manager">Manager</a>
+        <a href="/">POS</a>
+    </div>
+
+    <div class="card">
+        <h2>Accessory Products</h2>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Stock Qty</th>
+                <th>Buy Price</th>
+                <th>Sell Price</th>
+                <th>Profit / Piece</th>
+            </tr>
+
+            {% for p in products %}
+            <tr>
+                <td>{{ p.name }}</td>
+                <td>{{ p.qty }}</td>
+                <td>€{{ "%.2f"|format(p.buy_price or 0) }}</td>
+                <td>€{{ "%.2f"|format(p.sell_price or p.price or 0) }}</td>
+                <td>€{{ "%.2f"|format((p.sell_price or p.price or 0) - (p.buy_price or 0)) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
