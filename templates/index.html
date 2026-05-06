@@ -27,13 +27,11 @@
             <form method="POST" action="/charge">
 
                <input type="text" id="customerSearch" placeholder="Search customer...">
-
-<select name="customer_id" id="customerSelect" size="10" required>
+        <select name="customer_id" size="10" required>
     {% for c in customers %}
-    <option value="{{ c.id }}">{{ c.name }} - {{ c.phone }}</option>
+        <option value="{{ c.id }}">{{ c.name }}{% if c.phone %} - {{ c.phone }}{% endif %}</option>
     {% endfor %}
 </select>
-
                 <select name="type" id="type" onchange="updateChargeButton()">
                     <option>Fuel</option>
                     <option>Payment</option>
