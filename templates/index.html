@@ -171,7 +171,9 @@ function filterCustomers() {
     }
 }
 
-document.getElementById("customerSearch").addEventListener("input", filterCustomers);
+window.onload = function () {
+    document.getElementById("customerSearch").addEventListener("input", filterCustomers);
+};
 </script>
     
 </body>
