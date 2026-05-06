@@ -160,20 +160,19 @@ updateClock();
 updateChargeButton();
 
 <script>
-function filterCustomers() {
-    let search = document.getElementById("customerSearch").value.toLowerCase();
+function findCustomer(searchText) {
+    let search = searchText.toLowerCase();
     let select = document.getElementById("customerSelect");
-    let options = select.options;
 
-    for (let i = 0; i < options.length; i++) {
-        let text = options[i].text.toLowerCase();
-        options[i].hidden = !text.includes(search);
+    for (let i = 0; i < select.options.length; i++) {
+        let text = select.options[i].text.toLowerCase();
+
+        if (text.includes(search)) {
+            select.selectedIndex = i;
+            break;
+        }
     }
 }
-
-window.onload = function () {
-    document.getElementById("customerSearch").addEventListener("input", filterCustomers);
-};
 </script>
     
 </body>
