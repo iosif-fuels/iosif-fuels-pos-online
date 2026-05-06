@@ -173,23 +173,4 @@ a {
 .search-item:hover {
     background: #f3f4f6;
 }
-.customer-scroll-box {
-    max-height: 500px;
-    overflow-y: auto;
-    overflow-x: auto;
-    display: block;
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
 
-.customer-scroll-box table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.customer-scroll-box th,
-.customer-scroll-box td {
-    padding: 10px;
-    text-align: left;
-}
