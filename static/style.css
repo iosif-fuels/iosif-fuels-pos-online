@@ -118,13 +118,30 @@ a {
     margin-bottom: 15px;
 }
 
-.manager-button {
-    background: #16a34a;
-    color: white;
-    padding: 14px 24px;
+.manager-button,
+.endday-button {
+    display: inline-block;
+    padding: 12px 22px;
     border-radius: 10px;
+    color: white;
     text-decoration: none;
     font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.manager-button {
+    background: #2563eb;
+}
+
+.endday-button {
+    background: #f97316;
+}
+
+.top-actions form {
+    display: inline;
 }
 
 .logo {
