@@ -126,6 +126,13 @@ a {
     text-decoration: none;
     font-weight: bold;
 }
+<div class="top-actions">
+    <a href="/manager" class="manager-button">Manager</a>
+
+    <form method="POST" action="/end_day" onsubmit="return confirm('Are you sure you want to end/shift the day?');">
+        <button type="submit" class="endday-button">End Day</button>
+    </form>
+</div>
 .logo {
     width: 220px;
     height: auto;
