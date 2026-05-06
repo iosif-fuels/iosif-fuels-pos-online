@@ -33,7 +33,7 @@ def index():
         FROM transactions t
         LEFT JOIN customers c ON c.id = t.customer_id
         ORDER BY t.id DESC
-        LIMIT 30
+        LIMIT 10
     """)
     transactions = cur.fetchall()
 
