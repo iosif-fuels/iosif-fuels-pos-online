@@ -67,9 +67,14 @@
     <a href="/daily_report_pdf" target="_blank">
     <button type="button">Print Daily PDF</button>
 </a>
-    <form method="GET" action="/reports">
+    <form method="GET" action="/reports" style="margin-bottom:20px;">
     <input type="date" name="report_date" value="{{ selected_date }}">
+
     <button type="submit">View Day</button>
+
+    <a href="/daily_report_pdf?report_date={{ selected_date }}" target="_blank">
+        <button type="button">View Day as PDF</button>
+    </a>
 </form>
 
     <div class="card">
