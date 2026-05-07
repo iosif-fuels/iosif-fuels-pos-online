@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transactions</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Transactions</h1>
+
+    <div class="nav">
+        <a href="/">Back to POS</a>
+    </div>
+
+    <div class="card">
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Type</th>
+                <th>Item</th>
+                <th>Amount</th>
+                <th>Car Reg</th>
+            </tr>
+
+            {% for t in transactions %}
+            <tr>
+                <td>{{ t.date }}</td>
+                <td>{{ t.customer_name or "Cash Sale" }}</td>
+                <td>{{ t.type }}</td>
+                <td>{{ t.item }}</td>
+                <td>€{{ "%.2f"|format(t.amount) }}</td>
+                <td>{{ t.car_reg }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
