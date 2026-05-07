@@ -1034,5 +1034,23 @@ def products():
     conn.close()
 
     return render_template("products.html", products=products)
+    @app.route("/transactions")
+def transactions_page():
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    cur.execute("""
+        SELECT t.*, c.name AS customer_name
+        FROM transactions t
+        LEFT JOIN customers c ON c.id = t.customer_id
+        ORDER BY t.id DESC
+        LIMIT 100
+    """)
+    transactions = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template("transactions.html", transactions=transactions)
 if __name__ == "__main__":
     app.run(debug=True)
