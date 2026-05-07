@@ -217,7 +217,7 @@ def sell_accessory():
 
 @app.route("/reports")
 def reports():
-    today = date.today()
+    today = request.args.get("report_date") or str(date.today())
 
     conn = get_db()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -271,6 +271,7 @@ def reports():
         daily_sales=daily_sales,
         daily_payments=daily_payments,
         closed_days=closed_days
+        selected_date=today
     )
 
 
