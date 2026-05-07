@@ -437,6 +437,11 @@ def customer_statement(customer_id):
     )
 @app.route("/daily_report_pdf")
 def daily_report_pdf():
+    selected_date = request.args.get("report_date")
+
+if selected_date:
+    today = selected_date
+else:
     today = date.today()
 
     conn = get_db()
