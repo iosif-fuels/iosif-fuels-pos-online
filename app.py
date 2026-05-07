@@ -270,7 +270,7 @@ def reports():
         daily_transactions=daily_transactions,
         daily_sales=daily_sales,
         daily_payments=daily_payments,
-        closed_days=closed_days
+        closed_days=closed_days,
         selected_date=today
     )
 
