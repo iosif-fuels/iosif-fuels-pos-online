@@ -22,6 +22,7 @@
                 <th>Item</th>
                 <th>Amount</th>
                 <th>Car Reg</th>
+                <th>Void</th>
             </tr>
 
             {% for t in transactions %}
@@ -32,6 +33,13 @@
                 <td>{{ t.item }}</td>
                 <td>€{{ "%.2f"|format(t.amount) }}</td>
                 <td>{{ t.car_reg }}</td>
+                <td>
+                    <form method="POST" action="/void_transaction/{{ t.id }}">
+                        <button type="submit" onclick="return confirm('Void this transaction?');">
+                            Void
+                        </button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </table>
