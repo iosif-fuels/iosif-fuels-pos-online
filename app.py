@@ -515,7 +515,6 @@ else:
         mimetype="application/pdf"
     )
 
-
 @app.route("/monthly_report_pdf")
 def monthly_report_pdf():
     selected_month = request.args.get("month", date.today().strftime("%Y-%m"))
