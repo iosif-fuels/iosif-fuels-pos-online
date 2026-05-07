@@ -230,3 +230,47 @@ button {
 table {
     font-size: 18px;
 }
+/* Strong modern POS override */
+body {
+    background: #e9eef5 !important;
+    font-family: Arial, sans-serif !important;
+}
+
+.container {
+    max-width: 1500px !important;
+    padding: 30px !important;
+}
+
+.card {
+    background: white !important;
+    border-radius: 22px !important;
+    padding: 32px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12) !important;
+    margin-bottom: 30px !important;
+}
+
+.card h2 {
+    font-size: 34px !important;
+    color: #111827 !important;
+    border-bottom: 3px solid #e5e7eb !important;
+    padding-bottom: 16px !important;
+}
+
+input,
+select {
+    height: 68px !important;
+    font-size: 22px !important;
+    border-radius: 14px !important;
+    border: 2px solid #cbd5e1 !important;
+    padding: 14px 18px !important;
+}
+
+button {
+    height: 68px !important;
+    font-size: 22px !important;
+    border-radius: 14px !important;
+}
+
+table {
+    font-size: 20px !important;
+}
