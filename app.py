@@ -1034,7 +1034,7 @@ def products():
     conn.close()
 
     return render_template("products.html", products=products)
-    @app.route("/transactions")
+@app.route("/transactions")
 def transactions_page():
     conn = get_db()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
