@@ -69,29 +69,7 @@
 
     </div>
 
-    <div class="card">
-        <h2>Customer Balances</h2>
-        <div class="customer-scroll-box">
-            <table>
-        
-            <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Balance</th>
-                <th>Limit</th>
-            </tr>
-
-            {% for b in balances %}
-            <tr>
-                <td>{{ b.name }}</td>
-                <td>{{ b.phone }}</td>
-                <td>€{{ "%.2f"|format(b.balance) }}</td>
-                <td>€{{ "%.2f"|format(b.credit_limit) }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        </div>
-    </div>
+    
 
     <div class="card">
         <h2>Latest Transactions</h2>
