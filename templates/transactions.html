@@ -34,11 +34,11 @@
                 <td>€{{ "%.2f"|format(t.amount) }}</td>
                 <td>{{ t.car_reg }}</td>
                 <td>
-                    <form method="POST" action="/void_transaction/{{ t.transaction_id }}">
-                        <button type="submit" onclick="return confirm('Void this transaction?');">
-                            Void
-                        </button>
-                    </form>
+                    <form method="POST" action="/void_transaction/{{ t.id }}">
+    <button type="submit" onclick="return confirm('Void this transaction?');">
+        Void
+    </button>
+</form>
                 </td>
             </tr>
             {% endfor %}
