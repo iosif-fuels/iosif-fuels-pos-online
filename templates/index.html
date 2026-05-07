@@ -26,7 +26,7 @@
             <h2>Charge / Payment</h2>
             <form method="POST" action="/charge">
 
-               <input type="text" id="customerSearch" placeholder="Search customer...">
+               
         <select name="customer_id" size="10" required>
     {% for c in customers %}
         <option value="{{ c.id }}">{{ c.name }}{% if c.phone %} - {{ c.phone }}{% endif %}</option>
