@@ -27,7 +27,7 @@
 
     <form method="POST" action="/charge">
 
-        <select name="customer_id" required size="10">
+        <select name="customer_id" required>
             {% for c in customers %}
             <option value="{{ c.id }}">
                 {{ c.name }}{% if c.phone %} - {{ c.phone }}{% endif %}
