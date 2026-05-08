@@ -1043,6 +1043,7 @@ def transactions_page():
         SELECT t.*, c.name AS customer_name
         FROM transactions t
         LEFT JOIN customers c ON c.id = t.customer_id
+        WHERE COALESCE(t. voided, FALSE) = FALSE
         ORDER BY t.id DESC
         LIMIT 100
     """)
