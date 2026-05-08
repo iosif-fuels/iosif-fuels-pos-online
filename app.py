@@ -57,6 +57,7 @@ def index():
         accessories=accessories,
         transactions=transactions,
         balances=balances
+        batch=batch
     )
 
 
