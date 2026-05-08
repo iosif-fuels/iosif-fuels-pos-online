@@ -56,7 +56,7 @@ def index():
         customers=customers,
         accessories=accessories,
         transactions=transactions,
-        balances=balances
+        balances=balances,
         batch=batch
     )
 
