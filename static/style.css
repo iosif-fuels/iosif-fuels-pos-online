@@ -274,3 +274,23 @@ button {
 table {
     font-size: 20px !important;
 }
+.top-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-button {
+    text-decoration: none;
+    padding: 12px 18px;
+    background: #1f2937;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.nav-button:hover {
+    opacity: 0.9;
+}
