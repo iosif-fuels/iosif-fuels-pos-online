@@ -324,7 +324,11 @@ def end_day():
         total_sales,
         datetime.now()
     ))
-
+cur.execute("""
+    UPDATE settings
+    SET current_batch = current_batch + 1
+    WHERE id = 1
+""")
     conn.commit()
     cur.close()
     conn.close()
