@@ -70,40 +70,6 @@
 
     </div>
 
-    
-
-    <div class="card">
-        <h2>Latest Transactions</h2>
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Type</th>
-                <th>Item</th>
-                <th>Amount</th>
-                <th>Void</th>
-            </tr>
-
-            {% for t in transactions %}
-            <tr>
-                <td>{{ t.date.strftime('%d/%m/%Y %H:%M') }}</td>
-                <td>{{ t.customer_name }}</td>
-                <td>{{ t.type }}</td>
-                <td>{{ t.item }}</td>
-                <td>€{{ "%.2f"|format(t.amount) }}</td>
-                <td>
-    {% if not t.voided %}
-    <form method="POST" action="/void_transaction/{{ t.id }}">
-        <button type="submit" style="background:red;">Void</button>
-    </form>
-    {% else %}
-    VOIDED
-    {% endif %}
-</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
 
     <div class="nav">
         <a href="/reports">Daily Report</a>
