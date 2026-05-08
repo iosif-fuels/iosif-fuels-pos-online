@@ -21,7 +21,8 @@ def get_db():
 def index():
     conn = get_db()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
+    cur.execute("SELECT current_batch FROM settings WHERE id = 1")
+    batch = cur.fetchone()[0]
     cur.execute("SELECT * FROM customers ORDER BY name")
     customers = cur.fetchall()
 
