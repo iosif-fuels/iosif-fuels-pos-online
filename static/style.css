@@ -621,3 +621,60 @@ button {
     font-size: 20px;
     font-weight: bold;
 }
+.login-body {
+    background: linear-gradient(135deg, #050f2c, #0b2760) !important;
+}
+
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-card {
+    width: 420px;
+    background: white;
+    border-radius: 24px;
+    padding: 35px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+
+.login-icon {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+.login-header h1 {
+    background: none !important;
+    color: #111827 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    font-size: 30px !important;
+}
+
+.login-header p {
+    color: #64748b;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.login-button {
+    background: #2563eb !important;
+    color: white !important;
+    width: 100%;
+}
+
+.login-error {
+    color: red;
+    font-weight: bold;
+}
+
+.login-footer {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 25px;
+}
