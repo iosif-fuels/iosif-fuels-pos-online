@@ -607,3 +607,12 @@ button {
     font-size: 15px;
     color: #6b7280;
 }
+#chargeButton,
+.card button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
