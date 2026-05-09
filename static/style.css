@@ -400,7 +400,7 @@ h1 {
 
 .grid {
     display: grid;
-    grid-template-columns: 1.3fr 1fr;
+    grid-template-columns: 1.2fr 1fr;
     gap: 25px;
     align-items: stretch;
 }
