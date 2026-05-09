@@ -283,12 +283,21 @@ table {
 }
 
 .nav-button {
-    text-decoration: none;
-    padding: 12px 18px;
-    background: #1f2937;
-    color: white;
-    border-radius: 8px;
-    font-weight: bold;
+    background: white !important;
+    color: #111827 !important;
+    padding: 18px !important;
+    border-radius: 14px !important;
+    text-decoration: none !important;
+    font-weight: bold !important;
+    font-size: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 60px !important;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08) !important;
+}
+.top-actions a {
+    color: #111827 !important;
 }
 
 .nav-button:hover {
