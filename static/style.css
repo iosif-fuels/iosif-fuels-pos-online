@@ -286,7 +286,7 @@ table {
 .nav-button {
     background: white !important;
     color: #111827 !important;
-    padding: 18px !important;
+    padding: 16px 24px !important;
     border-radius: 14px !important;
     text-decoration: none !important;
     font-weight: bold !important;
@@ -294,8 +294,10 @@ table {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    gap: 8px !important;
+    min-width: 160px !important;
     min-height: 60px !important;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.08) !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08) !important;
 }
 .top-actions a {
     color: #111827 !important;
