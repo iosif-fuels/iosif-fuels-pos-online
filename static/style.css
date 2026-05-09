@@ -528,3 +528,39 @@ button {
     font-size: 24px !important;
     font-weight: bold;
 }
+.stats-bar {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+    margin: 25px 0 !important;
+}
+
+.stat-box {
+    background: white !important;
+    border-radius: 18px !important;
+    padding: 22px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 18px !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+}
+
+.stat-icon {
+    font-size: 42px !important;
+    width: 55px !important;
+    text-align: center !important;
+}
+
+.stat-box strong {
+    display: block !important;
+    font-size: 17px !important;
+    color: #374151 !important;
+    margin-bottom: 6px !important;
+}
+
+.stat-box span {
+    display: block !important;
+    font-size: 30px !important;
+    font-weight: bold !important;
+    color: #111827 !important;
+}
