@@ -7,54 +7,59 @@
 <body>
 
 <div class="container">
-    <h1>IOSIF P IOSIF TRADING LTD | Batch #{{ batch }}</h1>
-    
-    <div class="top-actions">
-    <a href="/" class="nav-button">POS</a>
-    <a href="/customers" class="nav-button">Customers</a>
-    <a href="/transactions" class="nav-button">Transactions</a>
-    <a href="/reports" class="nav-button">Reports</a>
-    <a href="/manager" class="nav-button manager-button">Manager</a>
 
-    <form method="POST" action="/end_day" style="display:inline;">
-        <button type="submit" class="endday-button">
-            End Day / Shift Day
-        </button>
-    </form>
-</div>
+    <h1>IOSIF P IOSIF TRADING LTD | Batch #{{ batch }}</h1>
+
+    <div class="top-actions">
+        <a href="/" class="nav-button">POS</a>
+        <a href="/customers" class="nav-button">Customers</a>
+        <a href="/transactions" class="nav-button">Transactions</a>
+        <a href="/reports" class="nav-button">Reports</a>
+        <a href="/manager" class="nav-button manager-button">Manager</a>
+
+        <form method="POST" action="/end_day" style="display:inline;">
+            <button type="submit" class="endday-button">
+                End Day / Shift Day
+            </button>
+        </form>
+    </div>
+
     <div id="clock" style="font-size:20px; font-weight:bold; margin-bottom:15px;"></div>
 
     <div class="grid">
 
-
+        <!-- Charge / Payment -->
         <div class="card">
-    <h2>Charge / Payment</h2>
+            <h2>Charge / Payment</h2>
 
-    <form method="POST" action="/charge">
+            <form method="POST" action="/charge">
 
-        <select name="customer_id" required>
-            {% for c in customers %}
-            <option value="{{ c.id }}">
-                {{ c.name }}{% if c.phone %} - {{ c.phone }}{% endif %}
-            </option>
-            {% endfor %}
-        </select>
+                <select name="customer_id" required>
+                    {% for c in customers %}
+                    <option value="{{ c.id }}">
+                        {{ c.name }}{% if c.phone %} - {{ c.phone }}{% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
 
-        <select name="type" id="type" onchange="updateChargeButton()">
-            <option>Fuel</option>
-            <option>Payment</option>
-        </select>
+                <select name="type" id="type" onchange="updateChargeButton()">
+                    <option>Fuel</option>
+                    <option>Payment</option>
+                </select>
 
-        <input name="item" placeholder="Fuel Type / Description">
-        <input name="amount" type="number" step="0.01" placeholder="Amount">
-        <input name="car_reg" placeholder="Car Reg">
+                <input name="item" placeholder="Fuel Type / Description">
+                <input name="amount" type="number" step="0.01" placeholder="Amount">
+                <input name="car_reg" placeholder="Car Reg">
 
-        <button type="submit" id="chargeButton">Charge</button>
-    </form>
-</div>
+                <button type="submit" id="chargeButton">Charge</button>
 
+            </form>
+        </div>
+
+        <!-- Sell Accessory -->
         <div class="card">
             <h2>Sell Accessory</h2>
+
             <form method="POST" action="/sell_accessory" target="_blank">
 
                 <select name="accessory_id">
@@ -68,45 +73,49 @@
                 <input name="qty" type="number" value="1">
 
                 <button type="submit">Sell</button>
+
             </form>
         </div>
 
     </div>
 
+    <!-- Quick Access -->
+    <div class="quick-access card">
+        <h2>Quick Access</h2>
 
-    <div class="nav">
-        <a href="/reports">Daily Report</a>
-<a href="/monthly_report">Monthly Report</a>
-        <a href="/fuel_stock">Fuel Tanks</a>
-        <a href="/accessories_statement">Accessories Statement</a>
-        <a href="/logout">Logout</a>
+        <div class="quick-grid">
+            <a href="/reports" class="quick-card">
+                <strong>Daily Report</strong>
+                <span>View daily sales</span>
+            </a>
+
+            <a href="/monthly_report" class="quick-card">
+                <strong>Monthly Report</strong>
+                <span>View monthly sales</span>
+            </a>
+
+            <a href="/fuel_stock" class="quick-card">
+                <strong>Fuel Tanks</strong>
+                <span>View fuel stock</span>
+            </a>
+
+            <a href="/accessories_statement" class="quick-card">
+                <strong>Accessories Statement</strong>
+                <span>View accessory sales</span>
+            </a>
+
+            <a href="/logout" class="quick-card">
+                <strong>Logout</strong>
+                <span>Sign out</span>
+            </a>
+        </div>
     </div>
 
+    <footer class="pos-footer">
+        © 2026 IOSIF P IOSIF TRADING LTD - All Rights Reserved
+    </footer>
+
 </div>
-<div class="quick-access card">
-    <h2>Quick Access</h2>
-
-    <div class="quick-grid">
-        <a href="/fuel_stock" class="quick-card">
-            <strong>Fuel Tanks</strong>
-            <span>View fuel stock</span>
-        </a>
-
-        <a href="/accessories_statement" class="quick-card">
-            <strong>Accessories Statement</strong>
-            <span>View accessory sales</span>
-        </a>
-
-        <a href="/logout" class="quick-card">
-            <strong>Logout</strong>
-            <span>Sign out</span>
-        </a>
-    </div>
-</div>
-
-<footer class="pos-footer">
-    © 2026 IOSIF P IOSIF TRADING LTD - All Rights Reserved
-</footer>
 
 <script>
 function updateClock() {
@@ -134,8 +143,7 @@ function updateChargeButton() {
 setInterval(updateClock, 1000);
 updateClock();
 updateChargeButton();
+</script>
 
-
-    
 </body>
 </html>
