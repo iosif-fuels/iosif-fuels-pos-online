@@ -413,7 +413,7 @@ button {
 }
 
 select[name="customer_id"] {
-    height: 170px !important;
+    height: 70px !important;
 }
 
 .card:nth-of-type(1) {
