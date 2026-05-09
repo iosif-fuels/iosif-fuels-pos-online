@@ -156,10 +156,10 @@ function updateChargeButton() {
     let button = document.getElementById("chargeButton");
 
     if (type === "Payment") {
-        button.innerText = "Payment";
+        button.innerHTML = "💵 Payment";
         button.style.backgroundColor = "red";
     } else {
-        button.innerText = "Charge";
+        button.innerHTML = "💳 Charge";
         button.style.backgroundColor = "green";
     }
 }
