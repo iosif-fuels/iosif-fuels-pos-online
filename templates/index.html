@@ -31,19 +31,21 @@
     </div>
 </div>
 
-    <div class="top-actions">
-        <a href="/" class="nav-button">POS</a>
-        <a href="/customers" class="nav-button">Customers</a>
-        <a href="/transactions" class="nav-button">Transactions</a>
-        <a href="/reports" class="nav-button">Reports</a>
-        <a href="/manager" class="nav-button manager-button">Manager</a>
+   <div class="top-actions">
 
-        <form method="POST" action="/end_day" style="display:inline;">
-            <button type="submit" class="endday-button">
-                End Day / Shift Day
-            </button>
-        </form>
-    </div>
+    <a href="/" class="nav-button active-nav">🖥 POS</a>
+    <a href="/customers" class="nav-button">👥 Customers</a>
+    <a href="/transactions" class="nav-button">📋 Transactions</a>
+    <a href="/reports" class="nav-button">📊 Reports</a>
+    <a href="/manager" class="nav-button">⚙ Manager</a>
+
+    <form method="POST" action="/end_day" style="display:inline;">
+        <button type="submit" class="endday-button">
+            ⏻ End Day / Shift Day
+        </button>
+    </form>
+
+</div>
 
     <div id="clock" style="font-size:20px; font-weight:bold; margin-bottom:15px;"></div>
 
