@@ -423,3 +423,49 @@ select[name="customer_id"] {
 .card:nth-of-type(2) {
     border-top: 8px solid #16a34a !important;
 }
+.quick-access {
+    margin-top: 35px !important;
+}
+
+.quick-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 22px !important;
+}
+
+.quick-card {
+    background: #ffffff !important;
+    border: 1px solid #dbe3ef !important;
+    border-radius: 16px !important;
+    padding: 26px !important;
+    text-decoration: none !important;
+    color: #111827 !important;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.08) !important;
+}
+
+.quick-card strong {
+    display: block !important;
+    font-size: 22px !important;
+    margin-bottom: 8px !important;
+}
+
+.quick-card span {
+    font-size: 16px !important;
+    color: #64748b !important;
+}
+
+.pos-footer {
+    margin-top: 45px !important;
+    background: #0f172a !important;
+    color: white !important;
+    text-align: center !important;
+    padding: 20px !important;
+    border-radius: 14px 14px 0 0 !important;
+    font-size: 16px !important;
+}
+
+@media (max-width: 900px) {
+    .quick-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
