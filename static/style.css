@@ -564,3 +564,46 @@ button {
     font-weight: bold !important;
     color: #111827 !important;
 }
+.quick-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+}
+
+.quick-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    transition: 0.2s;
+}
+
+.quick-card:hover {
+    transform: translateY(-3px);
+}
+
+.quick-icon {
+    font-size: 38px;
+    width: 50px;
+    text-align: center;
+}
+
+.quick-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.quick-text strong {
+    font-size: 22px;
+    color: #111827;
+    margin-bottom: 6px;
+}
+
+.quick-text span {
+    font-size: 15px;
+    color: #6b7280;
+}
