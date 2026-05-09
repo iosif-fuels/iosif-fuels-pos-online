@@ -294,3 +294,103 @@ table {
 .nav-button:hover {
     opacity: 0.9;
 }
+/* Professional POS UI upgrade */
+
+body {
+    background: #f1f5f9 !important;
+    font-family: Arial, sans-serif !important;
+    color: #111827 !important;
+}
+
+.container {
+    max-width: 1500px !important;
+    margin: 0 auto !important;
+    padding: 25px !important;
+}
+
+h1 {
+    background: linear-gradient(135deg, #111827, #374151) !important;
+    color: white !important;
+    padding: 24px 30px !important;
+    border-radius: 18px !important;
+    font-size: 34px !important;
+    letter-spacing: 1px !important;
+    margin-bottom: 18px !important;
+}
+
+.top-actions {
+    display: flex !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 22px !important;
+}
+
+.nav-button,
+.manager-button,
+.endday-button {
+    min-width: 150px !important;
+    height: 64px !important;
+    border-radius: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+    color: white !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+    border: none !important;
+}
+
+.nav-button {
+    background: #1f2937 !important;
+}
+
+.manager-button {
+    background: #2563eb !important;
+}
+
+.endday-button {
+    background: #f97316 !important;
+}
+
+.card {
+    background: white !important;
+    border-radius: 22px !important;
+    padding: 30px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.10) !important;
+    margin-bottom: 28px !important;
+}
+
+.card h2 {
+    font-size: 32px !important;
+    margin-top: 0 !important;
+    padding-bottom: 14px !important;
+    border-bottom: 3px solid #e5e7eb !important;
+}
+
+input,
+select {
+    width: 100% !important;
+    height: 64px !important;
+    font-size: 21px !important;
+    padding: 12px 16px !important;
+    border-radius: 14px !important;
+    border: 2px solid #cbd5e1 !important;
+    margin-bottom: 14px !important;
+    background: #f9fafb !important;
+}
+
+button {
+    cursor: pointer !important;
+}
+
+#chargeButton {
+    width: 100% !important;
+    height: 68px !important;
+    font-size: 24px !important;
+    border-radius: 14px !important;
+    background: #16a34a !important;
+    color: white !important;
+    border: none !important;
+    font-weight: bold !important;
+}
