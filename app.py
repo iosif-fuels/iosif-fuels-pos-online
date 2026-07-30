@@ -1061,3 +1061,18 @@ def transactions_page():
     return render_template("transactions.html", transactions=transactions)
 if __name__ == "__main__":
     app.run(debug=True)
+    
+    <div id="successPopup" class="success-popup">
+    ✅ Customer charged successfully!
+</div>
+
+<script>
+function showSuccess() {
+    const popup = document.getElementById("successPopup");
+    popup.style.display = "block";
+
+    setTimeout(() => {
+        popup.style.display = "none";
+    }, 3000);
+}
+</script>
