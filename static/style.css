@@ -678,3 +678,17 @@ button {
     color: #6b7280;
     margin-top: 25px;
 }
+.success-popup {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #28a745;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 9999;
+}
