@@ -581,9 +581,14 @@ def customer_statement_pdf(customer_id):
     conn = get_db()
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-    cur.execute("SELECT * FROM customers WHERE id = %s", (customer_id,))
+    # Get customer
+    cur.execute(
+        "SELECT * FROM customers WHERE id = %s",
+        (customer_id,)
+    )
     customer = cur.fetchone()
 
+    # Get transactions
     cur.execute("""
         SELECT *
         FROM transactions
@@ -592,6 +597,7 @@ def customer_statement_pdf(customer_id):
     """, (customer_id,))
     transactions = cur.fetchall()
 
+    # Current balance
     cur.execute("""
         SELECT COALESCE(SUM(amount), 0) AS balance
         FROM transactions
@@ -602,35 +608,460 @@ def customer_statement_pdf(customer_id):
     cur.close()
     conn.close()
 
+    # PDF imports
     from io import BytesIO
     from flask import send_file
-    from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, Spacer
-    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.lib import colors
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.styles import (
+        getSampleStyleSheet,
+        ParagraphStyle
+    )
+    from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER
+    from reportlab.lib.units import mm
+    from reportlab.platypus import (
+        SimpleDocTemplate,
+        Table,
+        TableStyle,
+        Paragraph,
+        Spacer
+    )
 
+    # Create PDF
     buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer)
+
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        rightMargin=15 * mm,
+        leftMargin=15 * mm,
+        topMargin=15 * mm,
+        bottomMargin=15 * mm
+    )
+
     styles = getSampleStyleSheet()
+
+    # Custom styles
+    company_style = ParagraphStyle(
+        "CompanyStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=20,
+        textColor=colors.HexColor("#082b55"),
+        leading=24
+    )
+
+    subtitle_style = ParagraphStyle(
+        "SubtitleStyle",
+        parent=styles["Normal"],
+        fontSize=10,
+        textColor=colors.HexColor("#718096"),
+        leading=14
+    )
+
+    statement_title = ParagraphStyle(
+        "StatementTitle",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=16,
+        textColor=colors.HexColor("#082b55"),
+        alignment=TA_RIGHT
+    )
+
+    label_style = ParagraphStyle(
+        "LabelStyle",
+        parent=styles["Normal"],
+        fontSize=8,
+        textColor=colors.HexColor("#718096")
+    )
+
+    customer_style = ParagraphStyle(
+        "CustomerStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=14,
+        textColor=colors.HexColor("#172b50")
+    )
+
+    balance_style = ParagraphStyle(
+        "BalanceStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=20,
+        textColor=colors.white,
+        alignment=TA_RIGHT
+    )
+
     elements = []
 
-    elements.append(Paragraph(f"Customer Statement - {customer['name']}", styles["Title"]))
-    elements.append(Paragraph(f"Phone: {customer['phone']}", styles["Normal"]))
-    elements.append(Paragraph(f"Balance: EUR {balance}", styles["Normal"]))
-    elements.append(Spacer(1, 20))
+    # =========================
+    # HEADER
+    # =========================
 
-    data = [["Date", "Type", "Item", "Amount"]]
+    header_data = [
+        [
+            Paragraph(
+                "IOSIF P IOSIF TRADING LTD",
+                company_style
+            ),
+            Paragraph(
+                "CUSTOMER STATEMENT",
+                statement_title
+            )
+        ],
+        [
+            Paragraph(
+                "Fuel & Customer Account Statement",
+                subtitle_style
+            ),
+            Paragraph(
+                "Generated: " +
+                __import__("datetime").datetime.now().strftime(
+                    "%d/%m/%Y %H:%M"
+                ),
+                subtitle_style
+            )
+        ]
+    ]
+
+    header_table = Table(
+        header_data,
+        colWidths=[105 * mm, 75 * mm]
+    )
+
+    header_table.setStyle(
+        TableStyle([
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            ("ALIGN", (1, 0), (1, -1), "RIGHT"),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+            (
+                "LINEBELOW",
+                (0, -1),
+                (-1, -1),
+                1,
+                colors.HexColor("#d9e2ec")
+            ),
+        ])
+    )
+
+    elements.append(header_table)
+    elements.append(Spacer(1, 8 * mm))
+
+    # =========================
+    # CUSTOMER + BALANCE
+    # =========================
+
+    customer_phone = customer["phone"] or "-"
+
+    customer_info = [
+        [
+            Paragraph(
+                "CUSTOMER",
+                label_style
+            ),
+            Paragraph(
+                "CURRENT BALANCE",
+                ParagraphStyle(
+                    "BalanceLabel",
+                    parent=label_style,
+                    textColor=colors.white,
+                    alignment=TA_RIGHT
+                )
+            )
+        ],
+        [
+            Paragraph(
+                customer["name"],
+                customer_style
+            ),
+            Paragraph(
+                f"EUR {float(balance):,.2f}",
+                balance_style
+            )
+        ],
+        [
+            Paragraph(
+                f"Phone: {customer_phone}",
+                subtitle_style
+            ),
+            Paragraph(
+                "Outstanding Account Balance",
+                ParagraphStyle(
+                    "BalanceSub",
+                    parent=subtitle_style,
+                    textColor=colors.HexColor("#dce7f5"),
+                    alignment=TA_RIGHT
+                )
+            )
+        ]
+    ]
+
+    customer_table = Table(
+        customer_info,
+        colWidths=[105 * mm, 75 * mm]
+    )
+
+    customer_table.setStyle(
+        TableStyle([
+            ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#f4f7fb")),
+            ("BACKGROUND", (1, 0), (1, -1), colors.HexColor("#173d6b")),
+
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+
+            ("TOPPADDING", (0, 0), (-1, -1), 8),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
+
+            ("LEFTPADDING", (0, 0), (-1, -1), 12),
+            ("RIGHTPADDING", (0, 0), (-1, -1), 12),
+
+            ("BOX", (0, 0), (-1, -1), 1, colors.HexColor("#d9e2ec"))
+        ])
+    )
+
+    elements.append(customer_table)
+    elements.append(Spacer(1, 8 * mm))
+
+    # =========================
+    # SUMMARY
+    # =========================
+
+    total_charges = sum(
+        float(t["amount"])
+        for t in transactions
+        if t["type"] != "Payment"
+    )
+
+    total_payments = sum(
+        abs(float(t["amount"]))
+        for t in transactions
+        if t["type"] == "Payment"
+    )
+
+    summary_style = ParagraphStyle(
+        "SummaryLabel",
+        parent=styles["Normal"],
+        fontSize=8,
+        textColor=colors.HexColor("#718096"),
+        alignment=TA_CENTER
+    )
+
+    summary_value = ParagraphStyle(
+        "SummaryValue",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=13,
+        textColor=colors.HexColor("#172b50"),
+        alignment=TA_CENTER
+    )
+
+    summary_data = [
+        [
+            Paragraph("TOTAL CHARGES", summary_style),
+            Paragraph("TOTAL PAYMENTS", summary_style),
+            Paragraph("CURRENT BALANCE", summary_style)
+        ],
+        [
+            Paragraph(
+                f"EUR {total_charges:,.2f}",
+                summary_value
+            ),
+            Paragraph(
+                f"EUR {total_payments:,.2f}",
+                summary_value
+            ),
+            Paragraph(
+                f"EUR {float(balance):,.2f}",
+                summary_value
+            )
+        ]
+    ]
+
+    summary_table = Table(
+        summary_data,
+        colWidths=[60 * mm, 60 * mm, 60 * mm]
+    )
+
+    summary_table.setStyle(
+        TableStyle([
+            ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
+            ("BOX", (0, 0), (-1, -1), 1, colors.HexColor("#d9e2ec")),
+
+            ("LINEBEFORE", (1, 0), (1, -1), 1, colors.HexColor("#d9e2ec")),
+            ("LINEBEFORE", (2, 0), (2, -1), 1, colors.HexColor("#d9e2ec")),
+
+            ("TOPPADDING", (0, 0), (-1, -1), 9),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 9)
+        ])
+    )
+
+    elements.append(summary_table)
+    elements.append(Spacer(1, 8 * mm))
+
+    # =========================
+    # TRANSACTION TABLE
+    # =========================
+
+    section_style = ParagraphStyle(
+        "SectionTitle",
+        parent=styles["Heading2"],
+        fontName="Helvetica-Bold",
+        fontSize=13,
+        textColor=colors.HexColor("#082b55"),
+        spaceAfter=8
+    )
+
+    elements.append(
+        Paragraph(
+            "TRANSACTION HISTORY",
+            section_style
+        )
+    )
+
+    data = [
+        [
+            "Date",
+            "Type",
+            "Description",
+            "Charge",
+            "Payment"
+        ]
+    ]
 
     for t in transactions:
+
+        amount = float(t["amount"] or 0)
+
+        if t["type"] == "Payment":
+            charge = "-"
+            payment = f"EUR {abs(amount):,.2f}"
+        else:
+            charge = f"EUR {amount:,.2f}"
+            payment = "-"
+
         data.append([
             str(t["date"]),
-            t["type"],
-            t["item"],
-            str(t["amount"])
+            str(t["type"] or ""),
+            str(t["item"] or "-"),
+            charge,
+            payment
         ])
 
-    table = Table(data)
-    elements.append(table)
+    # If no transactions
+    if not transactions:
+        data.append([
+            "No transactions found",
+            "",
+            "",
+            "",
+            ""
+        ])
 
+    transaction_table = Table(
+        data,
+        colWidths=[
+            28 * mm,
+            28 * mm,
+            62 * mm,
+            31 * mm,
+            31 * mm
+        ],
+        repeatRows=1
+    )
+
+    transaction_style = [
+        (
+            "BACKGROUND",
+            (0, 0),
+            (-1, 0),
+            colors.HexColor("#082b55")
+        ),
+
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+
+        (
+            "FONTNAME",
+            (0, 0),
+            (-1, 0),
+            "Helvetica-Bold"
+        ),
+
+        ("FONTSIZE", (0, 0), (-1, 0), 8),
+
+        ("ALIGN", (3, 1), (-1, -1), "RIGHT"),
+
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+
+        ("FONTSIZE", (0, 1), (-1, -1), 8),
+
+        (
+            "GRID",
+            (0, 0),
+            (-1, -1),
+            0.4,
+            colors.HexColor("#d9e2ec")
+        ),
+
+        ("TOPPADDING", (0, 0), (-1, -1), 7),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
+
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+    ]
+
+    # Alternate row backgrounds
+    for i in range(1, len(data)):
+        if i % 2 == 0:
+            transaction_style.append(
+                (
+                    "BACKGROUND",
+                    (0, i),
+                    (-1, i),
+                    colors.HexColor("#f8fafc")
+                )
+            )
+
+    transaction_table.setStyle(
+        TableStyle(transaction_style)
+    )
+
+    elements.append(transaction_table)
+    elements.append(Spacer(1, 10 * mm))
+
+    # =========================
+    # FOOTER
+    # =========================
+
+    footer_style = ParagraphStyle(
+        "Footer",
+        parent=styles["Normal"],
+        fontSize=8,
+        textColor=colors.HexColor("#718096"),
+        alignment=TA_CENTER
+    )
+
+    elements.append(
+        Paragraph(
+            "This statement shows the current account activity "
+            "and outstanding balance.",
+            footer_style
+        )
+    )
+
+    elements.append(
+        Spacer(1, 3 * mm)
+    )
+
+    elements.append(
+        Paragraph(
+            "© 2026 IOSIF P IOSIF TRADING LTD - "
+            "All Rights Reserved",
+            footer_style
+        )
+    )
+
+    # Build PDF
     doc.build(elements)
+
     buffer.seek(0)
 
     return send_file(
@@ -639,7 +1070,6 @@ def customer_statement_pdf(customer_id):
         download_name=f"{customer['name']}_statement.pdf",
         mimetype="application/pdf"
     )
-
 @app.route("/accessories_statement")
 def accessories_statement():
     selected_month = request.args.get("month", date.today().strftime("%Y-%m"))
