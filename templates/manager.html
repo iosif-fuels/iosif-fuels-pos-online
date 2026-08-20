@@ -1,39 +1,644 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Manager</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manager Panel - IOSIF FUELS POS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .page {
+            max-width: 1400px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #082b55, #1769dc);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(10, 45, 90, 0.12);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .header-icon {
+            width: 58px;
+            height: 58px;
+            background: white;
+            color: #1769dc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: #d7e7fb;
+            font-size: 14px;
+        }
+
+        .manager-badge {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .manager-badge strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .manager-badge span {
+            font-size: 11px;
+            color: #d7e7fb;
+            text-transform: uppercase;
+        }
+
+        /* NAVIGATION */
+
+        .nav {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0 25px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            padding: 11px 18px;
+            background: white;
+            border: 1px solid #dfe6ef;
+            border-radius: 8px;
+            color: #26364d;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav a:hover {
+            color: #1769dc;
+            border-color: #1769dc;
+        }
+
+        .nav a.active {
+            background: #1769dc;
+            color: white;
+            border-color: #1769dc;
+        }
+
+        /* INTRO */
+
+        .section-title {
+            margin: 0 0 6px;
+            font-size: 23px;
+            color: #172b50;
+        }
+
+        .section-description {
+            margin: 0 0 22px;
+            color: #7b8797;
+            font-size: 14px;
+        }
+
+        /* GRID */
+
+        .manager-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            border: 1px solid #e3e9f1;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 5px 20px rgba(20, 50, 90, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #eef5ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #172b50;
+        }
+
+        .card-header p {
+            margin: 4px 0 0;
+            color: #7b8797;
+            font-size: 13px;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #526175;
+        }
+
+        input {
+            width: 100%;
+            height: 45px;
+            border: 1px solid #dce4ee;
+            border-radius: 8px;
+            padding: 0 13px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #1769dc;
+            box-shadow: 0 0 0 3px rgba(23,105,220,0.08);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* BUTTON */
+
+        .submit-btn {
+            width: 100%;
+            height: 47px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 8px;
+            background: #1769dc;
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #1058bd;
+        }
+
+        /* QUICK MANAGEMENT */
+
+        .quick-section {
+            margin-top: 25px;
+        }
+
+        .quick-title {
+            margin: 0 0 15px;
+            font-size: 20px;
+            color: #172b50;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .quick-card {
+            background: white;
+            border: 1px solid #e3e9f1;
+            border-radius: 14px;
+            padding: 20px;
+            transition: 0.2s;
+            color: #172033;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-2px);
+            border-color: #1769dc;
+            box-shadow: 0 8px 22px rgba(20, 50, 90, 0.08);
+        }
+
+        .quick-icon {
+            font-size: 26px;
+            margin-bottom: 12px;
+        }
+
+        .quick-card strong {
+            display: block;
+            color: #172b50;
+            margin-bottom: 5px;
+        }
+
+        .quick-card span {
+            color: #7b8797;
+            font-size: 13px;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            text-align: center;
+            padding: 25px 0 5px;
+            color: #8793a4;
+            font-size: 12px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 850px) {
+
+            .page {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .manager-badge {
+                display: none;
+            }
+
+            .manager-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Manager Panel</h1>
+<div class="page">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-left">
+
+            <div class="header-icon">
+                ⚙️
+            </div>
+
+            <div>
+                <h1>Manager Panel</h1>
+                <p>Manage customers, products and system settings</p>
+            </div>
+
+        </div>
+
+        <div class="manager-badge">
+            <strong>MANAGER</strong>
+            <span>Administration Panel</span>
+        </div>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
 
     <div class="nav">
-        <a href="/">Back to POS</a>
-        <a href="/products">Products</a>
+
+        <a href="/">
+            🖥 POS
+        </a>
+
+        <a href="/manager" class="active">
+            ⚙ Manager
+        </a>
+
+        <a href="/products">
+            📦 Products
+        </a>
+
     </div>
 
-    <div class="card">
-        <h2>Add Customer</h2>
-        <form method="POST" action="/add_customer">
-            <input name="name" placeholder="Customer Name" required>
-            <input name="phone" placeholder="Phone">
-            <input name="opening_balance" type="number" step="0.01" placeholder="Opening Balance / Already Owes €">
-            <input name="credit_limit" type="number" step="0.01" placeholder="Credit Limit">
-            <button type="submit">Add Customer</button>
-        </form>
+
+    <!-- INTRO -->
+
+    <h2 class="section-title">
+        Management Tools
+    </h2>
+
+    <p class="section-description">
+        Add and manage customers, accessories and products from one place.
+    </p>
+
+
+    <!-- FORMS -->
+
+    <div class="manager-grid">
+
+
+        <!-- ADD CUSTOMER -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div class="card-icon">
+                    👤
+                </div>
+
+                <div>
+                    <h2>Add Customer</h2>
+                    <p>Create a new customer account and credit details.</p>
+                </div>
+
+            </div>
+
+
+            <form method="POST" action="/add_customer">
+
+                <div class="form-group">
+
+                    <label>Customer Name *</label>
+
+                    <input
+                        name="name"
+                        placeholder="Enter customer name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Phone Number</label>
+
+                    <input
+                        name="phone"
+                        placeholder="Enter phone number"
+                    >
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>Opening Balance (€)</label>
+
+                        <input
+                            name="opening_balance"
+                            type="number"
+                            step="0.01"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Credit Limit (€)</label>
+
+                        <input
+                            name="credit_limit"
+                            type="number"
+                            step="0.01"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="submit-btn">
+                    ➕ Add Customer
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ADD ACCESSORY -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <div class="card-icon">
+                    🛍️
+                </div>
+
+                <div>
+                    <h2>Add Accessory</h2>
+                    <p>Add new products to your accessories inventory.</p>
+                </div>
+
+            </div>
+
+
+            <form method="POST" action="/add_accessory">
+
+                <div class="form-group">
+
+                    <label>Accessory Name *</label>
+
+                    <input
+                        name="name"
+                        placeholder="Enter product name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>Quantity *</label>
+
+                        <input
+                            name="qty"
+                            type="number"
+                            placeholder="0"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>Buy Price (€)</label>
+
+                        <input
+                            name="buy_price"
+                            type="number"
+                            step="0.01"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Sell Price (€)</label>
+
+                    <input
+                        name="sell_price"
+                        type="number"
+                        step="0.01"
+                        placeholder="0.00"
+                    >
+
+                </div>
+
+
+                <button type="submit" class="submit-btn">
+                    ➕ Add Accessory
+                </button>
+
+            </form>
+
+        </div>
+
     </div>
 
-    <div class="card">
-        <h2>Add Accessory</h2>
-        <form method="POST" action="/add_accessory">
-            <input name="name" placeholder="Accessory Name" required>
-            <input name="qty" type="number" placeholder="Quantity" required>
-            <input name="buy_price" type="number" step="0.01" placeholder="Buy Price">
-            <input name="sell_price" type="number" step="0.01" placeholder="Sell Price">
-            <button type="submit">Add Accessory</button>
-        </form>
+
+    <!-- QUICK MANAGEMENT -->
+
+    <div class="quick-section">
+
+        <h2 class="quick-title">
+            Quick Management
+        </h2>
+
+
+        <div class="quick-grid">
+
+            <a href="/customers" class="quick-card">
+
+                <div class="quick-icon">
+                    👥
+                </div>
+
+                <strong>Customers</strong>
+
+                <span>
+                    View balances and customer accounts
+                </span>
+
+            </a>
+
+
+            <a href="/products" class="quick-card">
+
+                <div class="quick-icon">
+                    📦
+                </div>
+
+                <strong>Products</strong>
+
+                <span>
+                    Manage accessories and stock
+                </span>
+
+            </a>
+
+
+            <a href="/accessories_statement" class="quick-card">
+
+                <div class="quick-icon">
+                    📊
+                </div>
+
+                <strong>Sales & Profit</strong>
+
+                <span>
+                    View accessory performance
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+        © 2026 IOSIF P IOSIF TRADING LTD — Manager Panel
     </div>
 
 </div>
