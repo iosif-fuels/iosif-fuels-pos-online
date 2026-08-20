@@ -1,71 +1,651 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Accessories Statement</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Accessories - IOSIF FUELS POS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .page {
+            max-width: 1500px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #082b55, #1769dc);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(10, 45, 90, 0.12);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .header-icon {
+            width: 58px;
+            height: 58px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: #d7e7fb;
+            font-size: 14px;
+        }
+
+        .item-count {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .item-count strong {
+            display: block;
+            font-size: 22px;
+        }
+
+        .item-count span {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #d7e7fb;
+        }
+
+        /* NAV */
+
+        .nav {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            padding: 11px 18px;
+            background: white;
+            border: 1px solid #dfe6ef;
+            border-radius: 8px;
+            color: #26364d;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .nav a:hover {
+            color: #1769dc;
+            border-color: #1769dc;
+        }
+
+        .nav a.active {
+            background: #1769dc;
+            color: white;
+            border-color: #1769dc;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            border: 1px solid #e3e9f1;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 22px;
+            box-shadow: 0 5px 20px rgba(20, 50, 90, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #172b50;
+        }
+
+        .card-header p {
+            margin: 5px 0 0;
+            color: #7b8797;
+            font-size: 13px;
+        }
+
+        /* MONTH FILTER */
+
+        .filter-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input[type="month"] {
+            height: 42px;
+            padding: 0 12px;
+            border: 1px solid #dce4ee;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .filter-btn {
+            height: 42px;
+            border: none;
+            border-radius: 8px;
+            background: #1769dc;
+            color: white;
+            padding: 0 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .filter-btn:hover {
+            background: #1058bd;
+        }
+
+        /* SUMMARY CARDS */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #e3e9f1;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(20, 50, 90, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: #1769dc;
+        }
+
+        .summary-icon {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .summary-label {
+            color: #7b8797;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .summary-value {
+            margin-top: 6px;
+            font-size: 28px;
+            font-weight: 800;
+            color: #172b50;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th {
+            background: #101827;
+            color: white;
+            text-align: left;
+            padding: 14px 13px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        td {
+            padding: 14px 13px;
+            border-bottom: 1px solid #edf0f4;
+            font-size: 14px;
+        }
+
+        tbody tr:hover td {
+            background: #f8fbff;
+        }
+
+        .item-name {
+            font-weight: 700;
+            color: #172b50;
+        }
+
+        .qty-badge {
+            display: inline-block;
+            background: #e8f2ff;
+            color: #1769dc;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .price {
+            font-weight: 700;
+            color: #172b50;
+        }
+
+        .profit {
+            font-weight: 800;
+            color: #198754;
+        }
+
+        .sales-value {
+            font-weight: 800;
+            color: #172b50;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 35px;
+            color: #7b8797;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px 0;
+            color: #8793a4;
+            font-size: 12px;
+        }
+
+        @media (max-width: 800px) {
+
+            .page {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .item-count {
+                display: none;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-box {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            input[type="month"],
+            .filter-btn {
+                width: 100%;
+            }
+        }
+
+    </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Accessories Statement</h1>
+<div class="page">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-left">
+
+            <div class="header-icon">
+                🛍️
+            </div>
+
+            <div>
+                <h1>Accessories</h1>
+                <p>Manage stock, sales and profitability</p>
+            </div>
+
+        </div>
+
+        <div class="item-count">
+            <strong>{{ accessories|length }}</strong>
+            <span>Products</span>
+        </div>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
 
     <div class="nav">
-        <a href="/">POS</a>
-        <a href="/reports">Daily Report</a>
-        <a href="/monthly_report">Monthly Report</a>
+
+        <a href="/">
+            🖥 POS
+        </a>
+
+        <a href="/accessories_statement" class="active">
+            🛍 Accessories
+        </a>
+
+        <a href="/fuel_stock">
+            ⛽ Fuel Stock
+        </a>
+
+        <a href="/reports">
+            📊 Daily Reports
+        </a>
+
+        <a href="/monthly_report">
+            📅 Monthly Report
+        </a>
+
     </div>
 
-    <div class="card">
-        <h2>Accessories Stock</h2>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Qty</th>
-                <th>Buy Price</th>
-                <th>Sell Price</th>
-                <th>Profit / Piece</th>
-            </tr>
 
-            {% for a in accessories %}
-            <tr>
-                <td>{{ a.name }}</td>
-                <td>{{ a.qty }}</td>
-                <td>€{{ "%.2f"|format(a.buy_price or 0) }}</td>
-                <td>€{{ "%.2f"|format(a.sell_price or 0) }}</td>
-                <td>€{{ "%.2f"|format((a.sell_price or 0) - (a.buy_price or 0)) }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+    <!-- MONTH FILTER -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <div>
+                <h2>📅 Monthly Performance</h2>
+                <p>Select a month to view accessory sales and profit.</p>
+            </div>
+
+            <form method="GET"
+                  action="/accessories_statement"
+                  class="filter-box">
+
+                <input
+                    type="month"
+                    name="month"
+                    value="{{ selected_month }}"
+                >
+
+                <button type="submit" class="filter-btn">
+                    View Month
+                </button>
+
+            </form>
+
+        </div>
+
     </div>
 
-    <form method="GET" action="/accessories_statement">
-    <input type="month" name="month" value="{{ selected_month }}">
-    <button type="submit">Show Month</button>
-</form>
+
+    <!-- MONTHLY SUMMARY -->
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+
+            <div class="summary-icon">💰</div>
+
+            <div class="summary-label">
+                Total Sales
+            </div>
+
+            <div class="summary-value">
+                €{{ "%.2f"|format(monthly_totals.total_sell or 0) }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">🛒</div>
+
+            <div class="summary-label">
+                Total Cost
+            </div>
+
+            <div class="summary-value">
+                €{{ "%.2f"|format(monthly_totals.total_buy or 0) }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">📈</div>
+
+            <div class="summary-label">
+                Total Profit
+            </div>
+
+            <div class="summary-value">
+                €{{ "%.2f"|format(
+                    (monthly_totals.total_sell or 0)
+                    -
+                    (monthly_totals.total_buy or 0)
+                ) }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACCESSORIES STOCK -->
 
     <div class="card">
-    <h2>Monthly Totals</h2>
 
-    <p>Total Sell: €{{ "%.2f"|format(monthly_totals.total_sell or 0) }}</p>
-    <p>Total Buy: €{{ "%.2f"|format(monthly_totals.total_buy or 0) }}</p>
-    <p>Total Profit: €{{ "%.2f"|format((monthly_totals.total_sell or 0) - (monthly_totals.total_buy or 0)) }}</p>
-</div>
-    
+        <div class="card-header">
+
+            <div>
+                <h2>📦 Accessories Stock</h2>
+                <p>Current inventory and profit per product.</p>
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Product</th>
+                        <th>Stock</th>
+                        <th>Buy Price</th>
+                        <th>Sell Price</th>
+                        <th>Profit / Piece</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for a in accessories %}
+
+                    <tr>
+
+                        <td class="item-name">
+                            {{ a.name }}
+                        </td>
+
+                        <td>
+                            <span class="qty-badge">
+                                {{ a.qty }} in stock
+                            </span>
+                        </td>
+
+                        <td class="price">
+                            €{{ "%.2f"|format(a.buy_price or 0) }}
+                        </td>
+
+                        <td class="price">
+                            €{{ "%.2f"|format(a.sell_price or 0) }}
+                        </td>
+
+                        <td class="profit">
+                            +€{{ "%.2f"|format(
+                                (a.sell_price or 0)
+                                -
+                                (a.buy_price or 0)
+                            ) }}
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="5" class="empty-message">
+                            No accessories found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- SALES STATEMENT -->
+
     <div class="card">
-        <h2>Accessories Sales Statement</h2>
-        <table>
-            <tr>
-                <th>Item</th>
-                <th>Total Sales</th>
-            </tr>
 
-            {% for s in accessory_sales %}
-            <tr>
-                <td>{{ s.item }}</td>
-                <td>€{{ "%.2f"|format(s.total_sales or 0) }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="card-header">
+
+            <div>
+                <h2>📊 Accessories Sales</h2>
+                <p>Sales totals for the selected month.</p>
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Product</th>
+                        <th>Total Sales</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for s in accessory_sales %}
+
+                    <tr>
+
+                        <td class="item-name">
+                            {{ s.item }}
+                        </td>
+
+                        <td class="sales-value">
+                            €{{ "%.2f"|format(s.total_sales or 0) }}
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="2" class="empty-message">
+                            No accessory sales found for this month.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        © 2026 IOSIF P IOSIF TRADING LTD — All Rights Reserved
     </div>
 
 </div>
