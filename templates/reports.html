@@ -1,105 +1,811 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Reports</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reports - IOSIF FUELS POS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .page {
+            max-width: 1500px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #082b55, #145aa0);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(10, 45, 90, 0.12);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .header-icon {
+            width: 58px;
+            height: 58px;
+            background: white;
+            color: #1769dc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: #c8dbf7;
+            font-size: 14px;
+        }
+
+        .report-date {
+            background: rgba(255,255,255,0.12);
+            padding: 13px 20px;
+            border-radius: 10px;
+            text-align: right;
+        }
+
+        .report-date span {
+            display: block;
+            font-size: 11px;
+            color: #c8dbf7;
+            text-transform: uppercase;
+        }
+
+        .report-date strong {
+            display: block;
+            margin-top: 5px;
+            font-size: 16px;
+        }
+
+        /* NAVIGATION */
+
+        .nav {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            padding: 11px 18px;
+            background: white;
+            border: 1px solid #dfe6ef;
+            border-radius: 8px;
+            color: #26364d;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .nav a:hover {
+            border-color: #1769dc;
+            color: #1769dc;
+        }
+
+        .nav a.active {
+            background: #1769dc;
+            color: white;
+            border-color: #1769dc;
+        }
+
+        /* SUMMARY */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #e3e9f1;
+            border-radius: 13px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 5px 18px rgba(20, 50, 90, 0.05);
+        }
+
+        .summary-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .sales-icon {
+            background: #e8f2ff;
+        }
+
+        .payment-icon {
+            background: #e9f9ef;
+        }
+
+        .net-icon {
+            background: #fff3df;
+        }
+
+        .summary-label {
+            color: #718096;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .summary-value {
+            font-size: 24px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            border: 1px solid #e3e9f1;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(20, 50, 90, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 19px;
+            color: #172b50;
+        }
+
+        /* DATE CONTROLS */
+
+        .report-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .report-controls input {
+            height: 42px;
+            border: 1px solid #dce4ee;
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 14px;
+        }
+
+        button,
+        .button {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .primary-btn {
+            background: #1769dc;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #1058bd;
+        }
+
+        .pdf-btn {
+            background: #f1f6fd;
+            color: #1769dc;
+            border: 1px solid #cfe0f5;
+        }
+
+        .endday-btn {
+            background: #263b59;
+            color: white;
+        }
+
+        /* TOTAL BY TYPE */
+
+        .type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+        }
+
+        .type-box {
+            border: 1px solid #e5eaf0;
+            border-radius: 10px;
+            padding: 16px;
+            background: #f9fbfd;
+        }
+
+        .type-name {
+            color: #718096;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .type-value {
+            font-size: 21px;
+            font-weight: 800;
+            margin-top: 7px;
+            color: #172b50;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th {
+            background: #101827;
+            color: white;
+            text-align: left;
+            padding: 14px 13px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        td {
+            padding: 14px 13px;
+            border-bottom: 1px solid #edf0f4;
+            font-size: 14px;
+        }
+
+        tr:hover td {
+            background: #f8fbff;
+        }
+
+        .amount {
+            font-weight: 800;
+            color: #172b50;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 6px;
+            background: #e8f2ff;
+            color: #1769dc;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .empty-message {
+            padding: 25px;
+            text-align: center;
+            color: #7c899a;
+        }
+
+        /* CLOSED DAYS */
+
+        .closed-table td {
+            white-space: nowrap;
+        }
+
+        /* END DAY */
+
+        .end-day-box {
+            background: linear-gradient(135deg, #172b50, #294e7d);
+            color: white;
+            border-radius: 14px;
+            padding: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .end-day-box h2 {
+            color: white;
+            margin-bottom: 6px;
+        }
+
+        .end-day-box p {
+            margin: 0;
+            color: #c9d9ec;
+            font-size: 13px;
+        }
+
+        .end-day-box button {
+            background: white;
+            color: #172b50;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px 0;
+            color: #8793a4;
+            font-size: 12px;
+        }
+
+        @media (max-width: 800px) {
+
+            .page {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .report-date {
+                display: none;
+            }
+
+            .card-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .end-day-box {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Reports</h1>
+<div class="page">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-left">
+
+            <div class="header-icon">
+                📊
+            </div>
+
+            <div>
+                <h1>Daily Reports</h1>
+                <p>View daily sales, payments and transaction history</p>
+            </div>
+
+        </div>
+
+        <div class="report-date">
+            <span>Selected Report Date</span>
+            <strong>{{ selected_date }}</strong>
+        </div>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
 
     <div class="nav">
-        <a href="/">POS</a>
-        <a href="/reports">Daily Report</a>
-        <a href="/monthly_report">Monthly Report</a>
-        <a href="/customers">Customer Statements</a>
+
+        <a href="/">
+            🖥 POS
+        </a>
+
+        <a href="/reports" class="active">
+            📅 Daily Report
+        </a>
+
+        <a href="/monthly_report">
+            📊 Monthly Report
+        </a>
+
+        <a href="/customers">
+            👥 Customer Statements
+        </a>
+
     </div>
 
+
+    <!-- DATE SELECTOR -->
+
     <div class="card">
-        <h2>Today Report - {{ today }}</h2>
-        <p><b>Sales / Charges:</b> €{{ "%.2f"|format(daily_sales) }}</p>
-        <p><b>Customer Payments:</b> €{{ "%.2f"|format(daily_payments) }}</p>
+
+        <div class="card-header">
+
+            <div>
+                <h2>📅 Select Report Date</h2>
+            </div>
+
+            <form method="GET" action="/reports" class="report-controls">
+
+                <input
+                    type="date"
+                    name="report_date"
+                    value="{{ selected_date }}"
+                >
+
+                <button type="submit" class="primary-btn">
+                    View Day
+                </button>
+
+                <a
+                    href="/daily_report_pdf?report_date={{ selected_date }}"
+                    target="_blank"
+                    class="button pdf-btn"
+                >
+                    📄 View PDF
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUMMARY CARDS -->
+
+    <div class="summary">
+
+        <div class="summary-card">
+
+            <div class="summary-icon sales-icon">
+                💳
+            </div>
+
+            <div>
+                <div class="summary-label">
+                    Sales / Charges
+                </div>
+
+                <div class="summary-value">
+                    €{{ "%.2f"|format(daily_sales) }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon payment-icon">
+                💵
+            </div>
+
+            <div>
+                <div class="summary-label">
+                    Customer Payments
+                </div>
+
+                <div class="summary-value">
+                    €{{ "%.2f"|format(daily_payments) }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon net-icon">
+                📈
+            </div>
+
+            <div>
+                <div class="summary-label">
+                    Net Charges
+                </div>
+
+                <div class="summary-value">
+                    €{{ "%.2f"|format(daily_sales - daily_payments) }}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOTALS BY TYPE -->
+
+    <div class="card">
+
+        <div class="card-header">
+            <h2>Today Totals by Type</h2>
+        </div>
+
+        {% if daily_by_type %}
+
+        <div class="type-grid">
+
+            {% for d in daily_by_type %}
+
+            <div class="type-box">
+
+                <div class="type-name">
+                    {{ d.type }}
+                </div>
+
+                <div class="type-value">
+                    €{{ "%.2f"|format(d.total) }}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-message">
+            No transactions found for this day.
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- TODAY TRANSACTIONS -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h2>Transactions — {{ selected_date }}</h2>
+
+            <span style="color:#718096;font-size:13px;">
+                {{ daily_transactions|length }} transaction(s)
+            </span>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Type</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                        <th>Vehicle / Description</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for t in daily_transactions %}
+
+                    <tr>
+
+                        <td>
+                            {{ t.date }}
+                        </td>
+
+                        <td>
+                            {{ t.customer_name or "Cash Sale" }}
+                        </td>
+
+                        <td>
+                            <span class="type-badge">
+                                {{ t.type }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {{ t.item or "-" }}
+                        </td>
+
+                        <td class="amount">
+                            €{{ "%.2f"|format(t.amount) }}
+                        </td>
+
+                        <td>
+                            {{ t.car_reg or "-" }}
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="6" class="empty-message">
+                            No transactions found for this day.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- END DAY -->
+
+    <div class="end-day-box">
+
+        <div>
+
+            <h2>🌙 End Day / Save Daily Report</h2>
+
+            <p>
+                Close the current shift and save the daily totals.
+            </p>
+
+        </div>
 
         <form method="POST" action="/end_day">
-            <button type="submit">End Day / Save Daily Report</button>
+
+            <button type="submit">
+                ⏻ End Day
+            </button>
+
         </form>
+
     </div>
 
+
+    <!-- CLOSED DAILY REPORTS -->
+
     <div class="card">
-        <h2>Today Totals By Type</h2>
-        <table>
-            <tr><th>Type</th><th>Total</th></tr>
-            {% for d in daily_by_type %}
-            <tr>
-                <td>{{ d.type }}</td>
-                <td>€{{ "%.2f"|format(d.total) }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+
+        <div class="card-header">
+
+            <h2>📁 Closed Daily Reports</h2>
+
+            <a
+                href="/daily_report_pdf"
+                target="_blank"
+                class="button pdf-btn"
+            >
+                🖨 Print Daily PDF
+            </a>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table class="closed-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Day</th>
+                        <th>Accessories Sales</th>
+                        <th>Customer Charges</th>
+                        <th>Customer Payments</th>
+                        <th>Total Sales</th>
+                        <th>Closed At</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for d in closed_days %}
+
+                    <tr>
+
+                        <td>
+                            {{ d.day }}
+                        </td>
+
+                        <td class="amount">
+                            €{{ "%.2f"|format(d.accessories_sales) }}
+                        </td>
+
+                        <td class="amount">
+                            €{{ "%.2f"|format(d.customer_charges) }}
+                        </td>
+
+                        <td class="amount">
+                            €{{ "%.2f"|format(d.customer_payments) }}
+                        </td>
+
+                        <td class="amount">
+                            €{{ "%.2f"|format(d.total_sales) }}
+                        </td>
+
+                        <td>
+                            {{ d.closed_at }}
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="6" class="empty-message">
+                            No closed daily reports yet.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
 
-    <div class="card">
-        <h2>Closed Daily Reports</h2>
-        <table>
-            <tr>
-                <th>Day</th>
-                <th>Accessories Sales</th>
-                <th>Customer Charges</th>
-                <th>Customer Payments</th>
-                <th>Total Sales</th>
-                <th>Closed At</th>
-            </tr>
 
-            {% for d in closed_days %}
-            <tr>
-                <td>{{ d.day }}</td>
-                <td>€{{ "%.2f"|format(d.accessories_sales) }}</td>
-                <td>€{{ "%.2f"|format(d.customer_charges) }}</td>
-                <td>€{{ "%.2f"|format(d.customer_payments) }}</td>
-                <td>€{{ "%.2f"|format(d.total_sales) }}</td>
-                <td>{{ d.closed_at }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
-    <a href="/daily_report_pdf" target="_blank">
-    <button type="button">Print Daily PDF</button>
-</a>
-    <form method="GET" action="/reports" style="margin-bottom:20px;">
-    <input type="date" name="report_date" value="{{ selected_date }}">
-
-    <button type="submit">View Day</button>
-
-    <a href="/daily_report_pdf?report_date={{ selected_date }}" target="_blank">
-        <button type="button">View Day as PDF</button>
-    </a>
-</form>
-
-    <div class="card">
-        <h2>Today Transactions</h2>
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Type</th>
-                <th>Item</th>
-                <th>Amount</th>
-                <th>Description</th>
-            </tr>
-
-            {% for t in daily_transactions %}
-            <tr>
-                <td>{{ t.date }}</td>
-                <td>{{ t.customer_name or "Cash Sale" }}</td>
-                <td>{{ t.type }}</td>
-                <td>{{ t.item }}</td>
-                <td>€{{ "%.2f"|format(t.amount) }}</td>
-                <td>{{ t.car_reg }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+    <div class="footer">
+        © 2026 IOSIF P IOSIF TRADING LTD — All Rights Reserved
     </div>
 
 </div>
