@@ -6,9 +6,7 @@
     <title>IOSIF FUELS POS</title>
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -22,18 +20,12 @@
             color: inherit;
         }
 
-        /* =========================
-           MAIN LAYOUT
-        ========================= */
-
         .pos-layout {
             display: flex;
             min-height: 100vh;
         }
 
-        /* =========================
-           SIDEBAR
-        ========================= */
+        /* SIDEBAR */
 
         .sidebar {
             width: 245px;
@@ -82,7 +74,6 @@
             font-size: 15px;
             font-weight: 600;
             color: #dce9f7;
-            transition: 0.2s;
         }
 
         .nav a:hover {
@@ -93,7 +84,6 @@
         .nav a.active {
             background: #1677e8;
             color: white;
-            box-shadow: 0 5px 15px rgba(22,119,232,0.30);
         }
 
         .nav-icon {
@@ -108,7 +98,6 @@
 
         .shift-box {
             background: rgba(255,255,255,0.09);
-            border: 1px solid rgba(255,255,255,0.10);
             padding: 15px;
             border-radius: 12px;
             margin-bottom: 12px;
@@ -134,12 +123,9 @@
             font-size: 11px;
             color: #89a7c8;
             text-align: center;
-            margin-top: 12px;
         }
 
-        /* =========================
-           MAIN CONTENT
-        ========================= */
+        /* MAIN */
 
         .main {
             margin-left: 245px;
@@ -149,15 +135,12 @@
 
         .topbar {
             background: white;
-            height: 82px;
+            min-height: 82px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 30px;
+            padding: 15px 30px;
             border-bottom: 1px solid #e5eaf1;
-            position: sticky;
-            top: 0;
-            z-index: 10;
         }
 
         .company-title {
@@ -194,17 +177,11 @@
             font-weight: 700;
         }
 
-        .logout:hover {
-            background: #fff1f1;
-        }
-
         .content {
             padding: 25px 30px 35px;
         }
 
-        /* =========================
-           STAT CARDS
-        ========================= */
+        /* STATISTICS */
 
         .stats {
             display: grid;
@@ -235,17 +212,9 @@
             background: #e9f3ff;
         }
 
-        .stat-card:nth-child(2) .stat-icon {
-            background: #e9faef;
-        }
-
-        .stat-card:nth-child(3) .stat-icon {
-            background: #fff5dd;
-        }
-
-        .stat-card:nth-child(4) .stat-icon {
-            background: #f2eaff;
-        }
+        .stat-card:nth-child(2) .stat-icon { background: #e9faef; }
+        .stat-card:nth-child(3) .stat-icon { background: #fff5dd; }
+        .stat-card:nth-child(4) .stat-icon { background: #f2eaff; }
 
         .stat-label {
             font-size: 12px;
@@ -260,10 +229,6 @@
             margin-top: 5px;
         }
 
-        /* =========================
-           SECTION
-        ========================= */
-
         .section-title {
             color: #143c72;
             font-size: 17px;
@@ -271,10 +236,7 @@
             margin: 0 0 15px;
         }
 
-
-        /* =========================
-           SALES AREA
-        ========================= */
+        /* SALES */
 
         .sales-grid {
             display: grid;
@@ -305,36 +267,18 @@
             border: 1px solid #d9e1ec;
             border-radius: 8px;
             font-size: 14px;
-            background: white;
         }
 
         .card select:focus,
         .card input:focus {
             outline: none;
             border-color: #287fe3;
-            box-shadow: 0 0 0 3px rgba(40,127,227,0.10);
         }
 
-        .primary-button {
-            width: 100%;
-            border: none;
-            background: #1677e8;
-            color: white;
-            padding: 13px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .primary-button:hover {
-            background: #0e66cc;
-        }
-
+        .primary-button,
         .sell-button {
             width: 100%;
             border: none;
-            background: #13a65a;
             color: white;
             padding: 13px;
             border-radius: 8px;
@@ -343,9 +287,62 @@
             cursor: pointer;
         }
 
-        /* =========================
-           BOTTOM CARDS
-        ========================= */
+        .primary-button { background: #1677e8; }
+        .sell-button { background: #13a65a; }
+
+        /* QUICK ACTIONS */
+
+        .quick-section {
+            background: white;
+            border: 1px solid #e7ebf2;
+            border-radius: 13px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(20,45,80,0.04);
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .quick-card {
+            min-height: 105px;
+            border: 1px solid #e2e8f0;
+            border-radius: 11px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(25,60,100,0.10);
+            border-color: #76aeea;
+        }
+
+        .quick-icon {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .quick-card strong {
+            font-size: 14px;
+        }
+
+        .quick-card span {
+            display: block;
+            color: #7b8797;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        /* BOTTOM */
 
         .bottom-grid {
             display: grid;
@@ -386,11 +383,8 @@
             width: 38px;
             text-align: right;
         }
-              
 
-        /* =========================
-           END DAY
-        ========================= */
+        /* END DAY */
 
         .end-day-area {
             margin-top: 24px;
@@ -424,10 +418,6 @@
             cursor: pointer;
         }
 
-        /* =========================
-           FOOTER
-        ========================= */
-
         footer {
             text-align: center;
             color: #7d8998;
@@ -435,30 +425,7 @@
             padding: 20px 0 5px;
         }
 
-        /* =========================
-           POPUP
-        ========================= */
-
-        .success-popup {
-            display: none;
-            position: fixed;
-            right: 25px;
-            bottom: 25px;
-            background: #13a65a;
-            color: white;
-            padding: 15px 22px;
-            border-radius: 10px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.18);
-            font-weight: 700;
-            z-index: 100;
-        }
-
-        /* =========================
-           MOBILE
-        ========================= */
-
         @media (max-width: 1000px) {
-
             .sidebar {
                 width: 75px;
                 padding: 15px 9px;
@@ -466,7 +433,6 @@
 
             .logo-title {
                 font-size: 0;
-                text-align: center;
             }
 
             .logo-title::after {
@@ -486,10 +452,6 @@
                 padding: 14px 5px;
             }
 
-            .nav-icon {
-                font-size: 21px;
-            }
-
             .main {
                 margin-left: 75px;
                 width: calc(100% - 75px);
@@ -505,20 +467,13 @@
         }
 
         @media (max-width: 700px) {
-
             .topbar {
-                height: auto;
                 padding: 15px;
                 align-items: flex-start;
-                gap: 10px;
             }
 
             .company-title {
                 font-size: 16px;
-            }
-
-            .company-subtitle {
-                font-size: 10px;
             }
 
             .top-right {
@@ -539,10 +494,7 @@
                 padding: 15px;
             }
 
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
+            .stats,
             .sales-grid,
             .bottom-grid {
                 grid-template-columns: 1fr;
@@ -551,14 +503,6 @@
             .quick-grid {
                 grid-template-columns: 1fr 1fr;
             }
-
-            .stat-value {
-                font-size: 20px;
-            }
-
-            .quick-card {
-                min-height: 95px;
-            }
         }
     </style>
 </head>
@@ -566,10 +510,6 @@
 <body>
 
 <div class="pos-layout">
-
-    <!-- =========================
-         SIDEBAR
-    ========================== -->
 
     <aside class="sidebar">
 
@@ -637,36 +577,21 @@
     </aside>
 
 
-    <!-- =========================
-         MAIN
-    ========================== -->
-
     <main class="main">
-
-        <!-- TOP BAR -->
 
         <header class="topbar">
 
             <div>
-                <div class="company-title">
-                    IOSIF P IOSIF TRADING LTD
-                </div>
-
-                <div class="company-subtitle">
-                    Petrol Station POS System
-                </div>
+                <div class="company-title">IOSIF P IOSIF TRADING LTD</div>
+                <div class="company-subtitle">Petrol Station POS System</div>
             </div>
 
             <div class="top-right">
-
-                <div class="clock-box" id="clock">
-                    Loading...
-                </div>
+                <div class="clock-box" id="clock">Loading...</div>
 
                 <a href="/logout" class="logout">
                     ↪ Logout
                 </a>
-
             </div>
 
         </header>
@@ -674,9 +599,7 @@
 
         <div class="content">
 
-            <!-- =========================
-                 STATISTICS
-            ========================== -->
+            <!-- STATISTICS -->
 
             <div class="stats">
 
@@ -715,9 +638,89 @@
             </div>
 
 
-            <!-- =========================
-                 QUICK ACTIONS
-            ========================== -->
+            <!-- SALES FORMS FIRST -->
+
+            <div class="sales-grid">
+
+                <div class="card" id="charge">
+
+                    <h2>💳 Charge / Payment</h2>
+
+                    <form method="POST" action="/charge">
+
+                        <select name="customer_id" required>
+                            {% for c in customers %}
+                            <option value="{{ c.id }}">
+                                {{ c.name }}{% if c.phone %} - {{ c.phone }}{% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+
+                        <select name="type" id="type" onchange="updateChargeButton()">
+                            <option>Fuel</option>
+                            <option>Payment</option>
+                        </select>
+
+                        <input name="item"
+                               placeholder="Fuel Type / Description">
+
+                        <input name="amount"
+                               type="number"
+                               step="0.01"
+                               placeholder="Amount €">
+
+                        <input name="car_reg"
+                               placeholder="Car Registration">
+
+                        <button type="submit"
+                                class="primary-button"
+                                id="chargeButton">
+                            💳 Charge
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div class="card" id="accessory">
+
+                    <h2>🛒 Sell Accessory</h2>
+
+                    <form method="POST"
+                          action="/sell_accessory"
+                          target="_blank">
+
+                        <select name="accessory_id">
+
+                            {% for a in accessories %}
+                            <option value="{{ a.id }}">
+                                {{ a.name }} -
+                                €{{ "%.2f"|format(a.sell_price or a.price) }}
+                                - Stock: {{ a.qty }}
+                            </option>
+                            {% endfor %}
+
+                        </select>
+
+                        <input name="qty"
+                               type="number"
+                               value="1"
+                               min="1">
+
+                        <button type="submit"
+                                class="sell-button">
+                            🛒 Sell Accessory
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS SECOND -->
 
             <div class="quick-section">
 
@@ -784,176 +787,9 @@
             </div>
 
 
-            <!-- =========================
-                 SALES FORMS
-            ========================== -->
-
-            <div class="sales-grid">
-
-                <!-- CHARGE -->
-
-                <div class="card" id="charge">
-
-                    <h2>💳 Charge / Payment</h2>
-
-                    <form method="POST" action="/charge">
-
-                        <select name="customer_id" required>
-
-                            {% for c in customers %}
-
-                            <option value="{{ c.id }}">
-                                {{ c.name }}{% if c.phone %} - {{ c.phone }}{% endif %}
-                            </option>
-
-                            {% endfor %}
-
-                        </select>
-
-                        <select name="type" id="type" onchange="updateChargeButton()">
-
-                            <option>Fuel</option>
-                            <option>Payment</option>
-
-                        </select>
-
-                        <input
-                            name="item"
-                            placeholder="Fuel Type / Description"
-                        >
-
-                        <input
-                            name="amount"
-                            type="number"
-                            step="0.01"
-                            placeholder="Amount €"
-                        >
-
-                        <input
-                            name="car_reg"
-                            placeholder="Car Registration"
-                        >
-
-                        <button
-                            type="submit"
-                            class="primary-button"
-                            id="chargeButton"
-                        >
-                            💳 Charge
-                        </button>
-
-                    </form>
-
-                </div>
-
-
-                <!-- ACCESSORY -->
-
-                <div class="card" id="accessory">
-
-                    <h2>🛒 Sell Accessory</h2>
-
-                    <form
-                        method="POST"
-                        action="/sell_accessory"
-                        target="_blank"
-                    >
-
-                        <select name="accessory_id">
-
-                            {% for a in accessories %}
-
-                            <option value="{{ a.id }}">
-                                {{ a.name }} -
-                                €{{ "%.2f"|format(a.sell_price or a.price) }}
-                                - Stock: {{ a.qty }}
-                            </option>
-
-                            {% endfor %}
-
-                        </select>
-
-                        <input
-                            name="qty"
-                            type="number"
-                            value="1"
-                            min="1"
-                        >
-
-                        <button type="submit" class="sell-button">
-                            🛒 Sell Accessory
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-              /* =========================
-           QUICK ACTIONS
-        ========================= */
-
-        .quick-section {
-            background: white;
-            border: 1px solid #e7ebf2;
-            border-radius: 13px;
-            padding: 20px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 15px rgba(20,45,80,0.04);
-        }
-
-        .quick-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-        }
-
-        .quick-card {
-            min-height: 105px;
-            border: 1px solid #e2e8f0;
-            border-radius: 11px;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .quick-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 18px rgba(25,60,100,0.10);
-            border-color: #76aeea;
-        }
-
-        .quick-icon {
-            font-size: 27px;
-            margin-bottom: 7px;
-        }
-
-        .quick-card strong {
-            font-size: 14px;
-        }
-
-        .quick-card span {
-            display: block;
-            color: #7b8797;
-            font-size: 11px;
-            margin-top: 4px;
-        }
-
-
-
-            <!-- =========================
-                 INFORMATION
-            ========================== -->
+            <!-- FUEL STOCK / MANAGEMENT -->
 
             <div class="bottom-grid">
-
-                <!-- FUEL STOCK -->
 
                 <div class="card">
 
@@ -1007,18 +843,14 @@
                         <span class="stock-percent">60%</span>
                     </div>
 
-                    <a
-                        href="/fuel_stock"
-                        class="primary-button"
-                        style="display:block;text-align:center;margin-top:15px;"
-                    >
+                    <a href="/fuel_stock"
+                       class="primary-button"
+                       style="display:block;text-align:center;margin-top:15px;">
                         View Fuel Stock
                     </a>
 
                 </div>
 
-
-                <!-- RECENT / MANAGEMENT -->
 
                 <div class="card">
 
@@ -1026,35 +858,40 @@
 
                     <div class="info-row">
                         <span>Customers</span>
-                        <a href="/customers" style="color:#1677e8;font-weight:bold;">
+                        <a href="/customers"
+                           style="color:#1677e8;font-weight:bold;">
                             Open →
                         </a>
                     </div>
 
                     <div class="info-row">
                         <span>Transactions</span>
-                        <a href="/transactions" style="color:#1677e8;font-weight:bold;">
+                        <a href="/transactions"
+                           style="color:#1677e8;font-weight:bold;">
                             Open →
                         </a>
                     </div>
 
                     <div class="info-row">
                         <span>Reports</span>
-                        <a href="/reports" style="color:#1677e8;font-weight:bold;">
+                        <a href="/reports"
+                           style="color:#1677e8;font-weight:bold;">
                             Open →
                         </a>
                     </div>
 
                     <div class="info-row">
                         <span>Accessories Statement</span>
-                        <a href="/accessories_statement" style="color:#1677e8;font-weight:bold;">
+                        <a href="/accessories_statement"
+                           style="color:#1677e8;font-weight:bold;">
                             Open →
                         </a>
                     </div>
 
                     <div class="info-row">
                         <span>Manager</span>
-                        <a href="/manager" style="color:#1677e8;font-weight:bold;">
+                        <a href="/manager"
+                           style="color:#1677e8;font-weight:bold;">
                             Open →
                         </a>
                     </div>
@@ -1064,17 +901,13 @@
             </div>
 
 
-            <!-- =========================
-                 END DAY
-            ========================== -->
+            <!-- END DAY -->
 
             <div class="end-day-area">
 
                 <div class="end-day-text">
                     <strong>🌙 End Day / Close Shift</strong>
-                    <span>
-                        Close the current batch and complete the daily report.
-                    </span>
+                    <span>Close the current batch and complete the daily report.</span>
                 </div>
 
                 <form method="POST" action="/end_day">
@@ -1099,84 +932,55 @@
 </div>
 
 
-<!-- SUCCESS POPUP -->
-
-<div id="successPopup" class="success-popup">
-    ✅ Customer charged successfully!
-</div>
-
-
 <script>
 
-    /* =========================
-       CLOCK
-    ========================== */
+function updateClock() {
 
-    function updateClock() {
+    const now = new Date();
 
-        const now = new Date();
+    const date = now.toLocaleDateString("en-GB");
 
-        const date = now.toLocaleDateString(
-            "en-GB",
-            {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric"
-            }
-        );
-
-        const time = now.toLocaleTimeString(
-            "en-GB",
-            {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit"
-            }
-        );
-
-        document.getElementById("clock").innerHTML =
-            "📅 " + date + " &nbsp; 🕐 " + time;
-    }
-
-
-    /* =========================
-       CHARGE BUTTON
-    ========================== */
-
-    function updateChargeButton() {
-
-        const type =
-            document.getElementById("type").value;
-
-        const button =
-            document.getElementById("chargeButton");
-
-        if (type === "Payment") {
-
-            button.innerHTML = "💵 Payment";
-
-            button.style.backgroundColor = "#dc3545";
-
-        } else {
-
-            button.innerHTML = "💳 Charge";
-
-            button.style.backgroundColor = "#1677e8";
-
+    const time = now.toLocaleTimeString(
+        "en-GB",
+        {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
         }
+    );
+
+    document.getElementById("clock").innerHTML =
+        "📅 " + date + " &nbsp; 🕐 " + time;
+}
+
+
+function updateChargeButton() {
+
+    const type = document.getElementById("type").value;
+
+    const button =
+        document.getElementById("chargeButton");
+
+    if (type === "Payment") {
+
+        button.innerHTML = "💵 Payment";
+        button.style.backgroundColor = "#dc3545";
+
+    } else {
+
+        button.innerHTML = "💳 Charge";
+        button.style.backgroundColor = "#1677e8";
 
     }
 
+}
 
-    /* =========================
-       START
-    ========================== */
 
-    setInterval(updateClock, 1000);
+setInterval(updateClock, 1000);
 
-    updateClock();
+updateClock();
 
-    updateChargeButton();
+updateChargeButton();
 
 </script>
 
