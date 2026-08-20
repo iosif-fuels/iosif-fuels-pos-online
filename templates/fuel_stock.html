@@ -1,85 +1,680 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Fuel Tank Stock</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fuel Stock - IOSIF FUELS POS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .page {
+            max-width: 1500px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #082b55, #1769dc);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(10, 45, 90, 0.12);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .header-icon {
+            width: 58px;
+            height: 58px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: #d7e7fb;
+            font-size: 14px;
+        }
+
+        .tank-count {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .tank-count strong {
+            display: block;
+            font-size: 22px;
+        }
+
+        .tank-count span {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #d7e7fb;
+        }
+
+        /* NAV */
+
+        .nav {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            padding: 11px 18px;
+            background: white;
+            border: 1px solid #dfe6ef;
+            border-radius: 8px;
+            color: #26364d;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .nav a:hover {
+            color: #1769dc;
+            border-color: #1769dc;
+        }
+
+        .nav a.active {
+            background: #1769dc;
+            color: white;
+            border-color: #1769dc;
+        }
+
+        /* SECTION */
+
+        .section-title {
+            margin: 25px 0 15px;
+            font-size: 21px;
+            color: #172b50;
+        }
+
+        /* FUEL CARDS */
+
+        .fuel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .fuel-card {
+            background: white;
+            border: 1px solid #e3e9f1;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(20, 50, 90, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fuel-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: #1769dc;
+        }
+
+        .fuel-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fuel-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #172b50;
+        }
+
+        .fuel-icon {
+            width: 42px;
+            height: 42px;
+            background: #eef5ff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
+
+        .liters-label {
+            margin-top: 25px;
+            color: #7b8797;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .liters-value {
+            margin-top: 5px;
+            font-size: 30px;
+            font-weight: 800;
+            color: #172b50;
+        }
+
+        .liters-value span {
+            font-size: 14px;
+            color: #7b8797;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            border: 1px solid #e3e9f1;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 22px;
+            box-shadow: 0 5px 20px rgba(20, 50, 90, 0.05);
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #172b50;
+        }
+
+        .card-header p {
+            margin: 5px 0 0;
+            color: #7b8797;
+            font-size: 13px;
+        }
+
+        /* FORM */
+
+        .movement-form {
+            display: grid;
+            grid-template-columns: 1.2fr 1.2fr 1fr 2fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        select,
+        input {
+            width: 100%;
+            height: 45px;
+            border: 1px solid #dce4ee;
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 14px;
+            background: white;
+            outline: none;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: #1769dc;
+        }
+
+        .save-btn {
+            height: 45px;
+            border: none;
+            border-radius: 8px;
+            background: #1769dc;
+            color: white;
+            padding: 0 20px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .save-btn:hover {
+            background: #1058bd;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            background: #101827;
+            color: white;
+            text-align: left;
+            padding: 14px 13px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        td {
+            padding: 14px 13px;
+            border-bottom: 1px solid #edf0f4;
+            font-size: 14px;
+        }
+
+        tbody tr:hover td {
+            background: #f8fbff;
+        }
+
+        .fuel-name-table {
+            font-weight: 700;
+            color: #172b50;
+        }
+
+        .movement-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .movement-delivery {
+            background: #e7f7ed;
+            color: #198754;
+        }
+
+        .movement-sold {
+            background: #fff1f1;
+            color: #c62828;
+        }
+
+        .movement-reading {
+            background: #e8f2ff;
+            color: #1769dc;
+        }
+
+        .liters {
+            font-weight: 800;
+            color: #172b50;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 35px;
+            color: #7b8797;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px 0;
+            color: #8793a4;
+            font-size: 12px;
+        }
+
+        @media (max-width: 1100px) {
+
+            .movement-form {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .save-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .page {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .tank-count {
+                display: none;
+            }
+
+            .movement-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Fuel Tank Stock</h1>
+<div class="page">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-left">
+
+            <div class="header-icon">
+                ⛽
+            </div>
+
+            <div>
+                <h1>Fuel Stock</h1>
+                <p>Monitor tank levels and manage fuel movements</p>
+            </div>
+
+        </div>
+
+        <div class="tank-count">
+            <strong>{{ current_stock|length }}</strong>
+            <span>Fuel Tanks</span>
+        </div>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
 
     <div class="nav">
-        <a href="/">POS</a>
-        <a href="/reports">Daily Report</a>
-        <a href="/monthly_report">Monthly Report</a>
-        <a href="/accessories_statement">Accessories</a>
+
+        <a href="/">
+            🖥 POS
+        </a>
+
+        <a href="/fuel_stock" class="active">
+            ⛽ Fuel Stock
+        </a>
+
+        <a href="/reports">
+            📊 Daily Reports
+        </a>
+
+        <a href="/monthly_report">
+            📅 Monthly Report
+        </a>
+
+        <a href="/accessories_statement">
+            🛍 Accessories
+        </a>
+
     </div>
 
-    <div class="card">
-        <h2>Current Tank Stock</h2>
-        <table>
-            <tr>
-                <th>Fuel Type</th>
-                <th>Current Liters</th>
-            </tr>
 
-            {% for s in current_stock %}
-            <tr>
-                <td>{{ s.fuel_type }}</td>
-                <td>{{ "%.2f"|format(s.liters or 0) }} L</td>
-            </tr>
-            {% endfor %}
-        </table>
+    <!-- CURRENT STOCK -->
+
+    <h2 class="section-title">
+        ⛽ Current Tank Levels
+    </h2>
+
+    <div class="fuel-grid">
+
+        {% for s in current_stock %}
+
+        <div class="fuel-card">
+
+            <div class="fuel-top">
+
+                <div class="fuel-name">
+                    {{ s.fuel_type }}
+                </div>
+
+                <div class="fuel-icon">
+                    ⛽
+                </div>
+
+            </div>
+
+            <div class="liters-label">
+                Current Stock
+            </div>
+
+            <div class="liters-value">
+                {{ "%.2f"|format(s.liters or 0) }}
+                <span>L</span>
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-message">
+            No fuel tank stock found.
+        </div>
+
+        {% endfor %}
+
     </div>
 
-    <div class="card">
-        <h2>Add Fuel Movement</h2>
 
-        <form method="POST" action="/add_fuel_movement">
+    <!-- ADD MOVEMENT -->
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h2>➕ Add Fuel Movement</h2>
+
+            <p>
+                Record a tank reading, fuel delivery or fuel sold.
+            </p>
+
+        </div>
+
+
+        <form
+            method="POST"
+            action="/add_fuel_movement"
+            class="movement-form"
+        >
 
             <select name="fuel_type" required>
+
                 {% for f in fuel_types %}
-                <option value="{{ f }}">{{ f }}</option>
+
+                <option value="{{ f }}">
+                    {{ f }}
+                </option>
+
                 {% endfor %}
+
             </select>
+
 
             <select name="movement_type" required>
-                <option value="Tank Reading">Morning Tank Reading</option>
-                <option value="Delivery">Fuel Delivery / Bought Fuel</option>
-                <option value="Sold">Fuel Sold</option>
+
+                <option value="Tank Reading">
+                    📏 Morning Tank Reading
+                </option>
+
+                <option value="Delivery">
+                    🚛 Fuel Delivery / Bought Fuel
+                </option>
+
+                <option value="Sold">
+                    📉 Fuel Sold
+                </option>
+
             </select>
 
-            <input type="number" step="0.01" name="liters" placeholder="Liters" required>
 
-            <input name="note" placeholder="Note / Invoice / Details">
+            <input
+                type="number"
+                step="0.01"
+                name="liters"
+                placeholder="Liters"
+                required
+            >
 
-            <button type="submit">Save Fuel Movement</button>
+
+            <input
+                name="note"
+                placeholder="Note / Invoice / Details"
+            >
+
+
+            <button
+                type="submit"
+                class="save-btn"
+            >
+                💾 Save
+            </button>
+
         </form>
+
     </div>
 
+
+    <!-- LATEST MOVEMENTS -->
+
     <div class="card">
-        <h2>Latest Fuel Movements</h2>
 
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Fuel</th>
-                <th>Type</th>
-                <th>Liters</th>
-                <th>Note</th>
-            </tr>
+        <div class="card-header">
 
-            {% for m in movements %}
-            <tr>
-                <td>{{ m.created_at }}</td>
-                <td>{{ m.fuel_type }}</td>
-                <td>{{ m.movement_type }}</td>
-                <td>{{ "%.2f"|format(m.liters or 0) }} L</td>
-                <td>{{ m.note }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+            <h2>📋 Latest Fuel Movements</h2>
+
+            <p>
+                Recent tank readings, deliveries and fuel sales.
+            </p>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Fuel</th>
+                        <th>Movement</th>
+                        <th>Liters</th>
+                        <th>Note / Details</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for m in movements %}
+
+                    <tr>
+
+                        <td>
+                            {{ m.created_at }}
+                        </td>
+
+
+                        <td class="fuel-name-table">
+                            {{ m.fuel_type }}
+                        </td>
+
+
+                        <td>
+
+                            {% if m.movement_type == "Delivery" %}
+
+                                <span class="movement-badge movement-delivery">
+                                    🚛 Delivery
+                                </span>
+
+                            {% elif m.movement_type == "Sold" %}
+
+                                <span class="movement-badge movement-sold">
+                                    📉 Sold
+                                </span>
+
+                            {% else %}
+
+                                <span class="movement-badge movement-reading">
+                                    📏 Tank Reading
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td class="liters">
+                            {{ "%.2f"|format(m.liters or 0) }} L
+                        </td>
+
+
+                        <td>
+                            {{ m.note or "-" }}
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="5" class="empty-message">
+                            No fuel movements found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+        © 2026 IOSIF P IOSIF TRADING LTD — All Rights Reserved
     </div>
 
 </div>
