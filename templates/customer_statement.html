@@ -1,23 +1,461 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Statement - IOSIF FUELS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .statement {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(20, 50, 90, 0.10);
+            border: 1px solid #e2e8f0;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #082b55, #1769dc);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .company h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .company p {
+            margin: 7px 0 0;
+            color: #d7e7fb;
+            font-size: 13px;
+        }
+
+        .statement-title {
+            text-align: right;
+        }
+
+        .statement-title h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .statement-title p {
+            margin: 7px 0 0;
+            color: #d7e7fb;
+            font-size: 12px;
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 30px;
+        }
+
+        .customer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .customer-box,
+        .balance-box {
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .customer-box {
+            background: #f6f9fd;
+            border: 1px solid #e2eaf3;
+        }
+
+        .label {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #718096;
+            margin-bottom: 7px;
+        }
+
+        .customer-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #172b50;
+        }
+
+        .customer-phone {
+            margin-top: 7px;
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .balance-box {
+            background: linear-gradient(135deg, #172b50, #294e7d);
+            color: white;
+        }
+
+        .balance-box .label {
+            color: #c8dbef;
+        }
+
+        .balance {
+            font-size: 30px;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+
+        /* TABLE */
+
+        .section-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: #172b50;
+            margin: 25px 0 15px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th {
+            background: #172b50;
+            color: white;
+            text-align: left;
+            padding: 14px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #edf0f4;
+            font-size: 14px;
+        }
+
+        tr:hover td {
+            background: #f7faff;
+        }
+
+        .amount {
+            font-weight: 800;
+        }
+
+        .charge {
+            color: #c0392b;
+        }
+
+        .payment {
+            color: #198754;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 6px;
+            background: #e8f2ff;
+            color: #1769dc;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            border-top: 1px solid #edf0f4;
+            margin-top: 25px;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            color: #7b8797;
+            font-size: 12px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            padding: 11px 17px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            background: #eef3f8;
+            color: #294e7d;
+        }
+
+        .print-btn {
+            background: #1769dc;
+            color: white;
+        }
+
+        @media (max-width: 700px) {
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .statement-title {
+                text-align: left;
+            }
+
+            .customer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+        @media print {
+
+            body {
+                background: white;
+            }
+
+            .page {
+                margin: 0;
+                padding: 0;
+                max-width: 100%;
+            }
+
+            .statement {
+                box-shadow: none;
+                border: none;
+            }
+
+            .buttons {
+                display: none;
+            }
+
+            .header {
+                border-radius: 0;
+            }
+        }
+
+    </style>
+</head>
+
 <body>
-<h1>Customer Statement</h1>
 
-<p>Name: {{ customer.name }}</p>
-<p>Balance: €{{ "%.2f"|format(balance) }}</p>
+<div class="page">
 
-<table border="1">
-<tr><th>Date</th><th>Type</th><th>Item</th><th>Amount</th></tr>
-{% for t in transactions %}
-<tr>
-<td>{{ t.date }}</td>
-<td>{{ t.type }}</td>
-<td>{{ t.item }}</td>
-<td>€{{ "%.2f"|format(t.amount) }}</td>
-</tr>
-{% endfor %}
-</table>
+    <div class="statement">
 
-<a href="/customers">Back</a>
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div class="company">
+                <h1>⛽ IOSIF P IOSIF TRADING LTD</h1>
+                <p>Customer Account & Fuel Statement</p>
+            </div>
+
+            <div class="statement-title">
+                <h2>CUSTOMER STATEMENT</h2>
+                <p>Generated: <span id="currentDate"></span></p>
+            </div>
+
+        </div>
+
+
+        <div class="content">
+
+            <!-- CUSTOMER INFORMATION -->
+
+            <div class="customer-grid">
+
+                <div class="customer-box">
+
+                    <div class="label">
+                        Customer
+                    </div>
+
+                    <div class="customer-name">
+                        {{ customer.name }}
+                    </div>
+
+                    {% if customer.phone %}
+                    <div class="customer-phone">
+                        📞 {{ customer.phone }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="balance-box">
+
+                    <div class="label">
+                        Current Outstanding Balance
+                    </div>
+
+                    <div class="balance">
+                        €{{ "%.2f"|format(balance) }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TRANSACTIONS -->
+
+            <div class="section-title">
+                Transaction History
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th style="text-align:right;">Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for t in transactions %}
+
+                        <tr>
+
+                            <td>
+                                {{ t.date }}
+                            </td>
+
+                            <td>
+                                <span class="type-badge">
+                                    {{ t.type }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ t.item or "-" }}
+                            </td>
+
+                            <td style="text-align:right;"
+                                class="amount {% if t.type == 'Payment' %}payment{% else %}charge{% endif %}">
+
+                                {% if t.type == "Payment" %}
+                                    -€{{ "%.2f"|format(t.amount) }}
+                                {% else %}
+                                    +€{{ "%.2f"|format(t.amount) }}
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="4" style="text-align:center; color:#7b8797;">
+                                No transactions found for this customer.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="footer">
+
+                <div class="footer-text">
+                    This statement shows the current account activity and outstanding balance.
+                    <br>
+                    © 2026 IOSIF P IOSIF TRADING LTD
+                </div>
+
+                <div class="buttons">
+
+                    <a href="/customers" class="btn back-btn">
+                        ← Back to Customers
+                    </a>
+
+                    <button onclick="window.print()" class="btn print-btn">
+                        🖨 Print Statement
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    const now = new Date();
+
+    document.getElementById("currentDate").innerHTML =
+        now.toLocaleDateString("en-GB") +
+        " " +
+        now.toLocaleTimeString("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+</script>
+
 </body>
 </html>
