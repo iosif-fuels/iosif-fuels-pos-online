@@ -1,50 +1,524 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Transactions</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Transactions - IOSIF FUELS POS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .page {
+            max-width: 1500px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #082b55, #1769dc);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(10, 45, 90, 0.12);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .header-icon {
+            width: 58px;
+            height: 58px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            color: #d7e7fb;
+            font-size: 14px;
+        }
+
+        .transaction-count {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .transaction-count strong {
+            display: block;
+            font-size: 22px;
+        }
+
+        .transaction-count span {
+            font-size: 11px;
+            color: #d7e7fb;
+            text-transform: uppercase;
+        }
+
+        /* NAVIGATION */
+
+        .nav {
+            margin: 20px 0;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: white;
+            color: #26364d;
+            border: 1px solid #dfe6ef;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            color: #1769dc;
+            border-color: #1769dc;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            border: 1px solid #e3e9f1;
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 5px 20px rgba(20, 50, 90, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            color: #172b50;
+            font-size: 20px;
+        }
+
+        /* SEARCH */
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 280px;
+            padding: 11px 14px;
+            border: 1px solid #dce4ee;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #1769dc;
+        }
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            background: #101827;
+            color: white;
+            text-align: left;
+            padding: 14px 13px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        td {
+            padding: 14px 13px;
+            border-bottom: 1px solid #edf0f4;
+            font-size: 14px;
+        }
+
+        tbody tr:hover td {
+            background: #f8fbff;
+        }
+
+        .customer-name {
+            font-weight: 700;
+            color: #172b50;
+        }
+
+        .cash-sale {
+            color: #7b8797;
+        }
+
+        /* TYPE BADGES */
+
+        .type-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .type-payment {
+            background: #e7f7ed;
+            color: #198754;
+        }
+
+        .type-fuel {
+            background: #e8f2ff;
+            color: #1769dc;
+        }
+
+        /* AMOUNT */
+
+        .amount {
+            font-weight: 800;
+            color: #172b50;
+        }
+
+        .payment-amount {
+            color: #198754;
+        }
+
+        /* VOID BUTTON */
+
+        .void-btn {
+            border: none;
+            background: #fff0f0;
+            color: #c62828;
+            border: 1px solid #ffcaca;
+            padding: 8px 13px;
+            border-radius: 7px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .void-btn:hover {
+            background: #c62828;
+            color: white;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 35px;
+            color: #7b8797;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            text-align: center;
+            padding: 20px 0 5px;
+            color: #8793a4;
+            font-size: 12px;
+        }
+
+        @media (max-width: 800px) {
+
+            .page {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .transaction-count {
+                display: none;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-box,
+            .search-box input {
+                width: 100%;
+            }
+        }
+
+    </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Transactions</h1>
+<div class="page">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="header-left">
+
+            <div class="header-icon">
+                📋
+            </div>
+
+            <div>
+                <h1>Transactions</h1>
+                <p>View and manage all customer transactions</p>
+            </div>
+
+        </div>
+
+        <div class="transaction-count">
+            <strong>{{ transactions|length }}</strong>
+            <span>Transactions</span>
+        </div>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
 
     <div class="nav">
-        <a href="/">Back to POS</a>
+
+        <a href="/" class="back-btn">
+            ← Back to POS
+        </a>
+
     </div>
+
+
+    <!-- TRANSACTION TABLE -->
 
     <div class="card">
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Customer</th>
-                <th>Type</th>
-                <th>Item</th>
-                <th>Amount</th>
-                <th>Car Reg</th>
-                <th>Void</th>
-            </tr>
 
-            {% for t in transactions %}
-            <tr>
-                <td>{{ t.date }}</td>
-                <td>{{ t.customer_name or "Cash Sale" }}</td>
-                <td>{{ t.type }}</td>
-                <td>{{ t.item }}</td>
-                <td>€{{ "%.2f"|format(t.amount) }}</td>
-                <td>{{ t.car_reg }}</td>
-                <td>
-                    <form method="POST" action="/void_transaction/{{ t.id }}">
-    <button type="submit" onclick="return confirm('Void this transaction?');">
-        Void
-    </button>
-</form>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
+        <div class="card-header">
+
+            <h2>📋 Transaction History</h2>
+
+            <div class="search-box">
+                <input
+                    type="text"
+                    id="transactionSearch"
+                    placeholder="🔍 Search customer, item or car..."
+                >
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table id="transactionsTable">
+
+                <thead>
+
+                    <tr>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Type</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                        <th>Car Registration</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for t in transactions %}
+
+                    <tr class="transaction-row">
+
+                        <td>
+                            {{ t.date }}
+                        </td>
+
+
+                        <td class="customer-name">
+
+                            {% if t.customer_name %}
+                                {{ t.customer_name }}
+                            {% else %}
+                                <span class="cash-sale">
+                                    Cash Sale
+                                </span>
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if t.type == "Payment" %}
+
+                                <span class="type-badge type-payment">
+                                    💵 Payment
+                                </span>
+
+                            {% else %}
+
+                                <span class="type-badge type-fuel">
+                                    ⛽ {{ t.type }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ t.item or "-" }}
+                        </td>
+
+
+                        <td class="amount {% if t.type == 'Payment' %}payment-amount{% endif %}">
+
+                            {% if t.type == "Payment" %}
+                                -€{{ "%.2f"|format(t.amount) }}
+                            {% else %}
+                                €{{ "%.2f"|format(t.amount) }}
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ t.car_reg or "-" }}
+                        </td>
+
+
+                        <td>
+
+                            <form
+                                method="POST"
+                                action="/void_transaction/{{ t.id }}"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="void-btn"
+                                    onclick="return confirm('Void this transaction?');"
+                                >
+                                    ✕ Void
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="7" class="empty-message">
+                            No transactions found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
+
+
+    <div class="footer">
+        © 2026 IOSIF P IOSIF TRADING LTD — All Rights Reserved
+    </div>
+
 </div>
+
+
+<script>
+
+    const searchInput = document.getElementById("transactionSearch");
+
+    searchInput.addEventListener("keyup", function() {
+
+        const filter = searchInput.value.toLowerCase();
+
+        const rows =
+            document.querySelectorAll(".transaction-row");
+
+        rows.forEach(function(row) {
+
+            const text =
+                row.innerText.toLowerCase();
+
+            if (text.includes(filter)) {
+
+                row.style.display = "";
+
+            } else {
+
+                row.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+</script>
 
 </body>
 </html>
