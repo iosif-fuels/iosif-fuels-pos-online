@@ -1106,17 +1106,25 @@ def fuel_stock():
     current_stock = []
 
     for fuel in fuel_types:
+
         cur.execute("""
             SELECT COALESCE(SUM(
-                CASE 
-                    WHEN movement_type IN ('Opening Stock', 'Delivery') THEN liters
-                    WHEN movement_type = 'Sold' THEN -liters
+                CASE
+                    WHEN movement_type IN ('Tank Reading', 'Opening Stock', 'Delivery')
+                        THEN liters
+
+                    WHEN movement_type = 'Sold'
+                        THEN -liters
+
                     ELSE 0
                 END
             ), 0) AS liters
+
             FROM fuel_movements
+
             WHERE fuel_type = %s
         """, (fuel,))
+
         liters = cur.fetchone()["liters"]
 
         current_stock.append({
@@ -1124,16 +1132,20 @@ def fuel_stock():
             "liters": liters
         })
 
+
+    # Latest fuel movements
     cur.execute("""
         SELECT *
         FROM fuel_movements
         ORDER BY created_at DESC
         LIMIT 50
     """)
+
     movements = cur.fetchall()
 
     cur.close()
     conn.close()
+
 
     return render_template(
         "fuel_stock.html",
@@ -1141,7 +1153,6 @@ def fuel_stock():
         current_stock=current_stock,
         movements=movements
     )
-
 
 @app.route("/add_fuel_movement", methods=["POST"])
 def add_fuel_movement():
